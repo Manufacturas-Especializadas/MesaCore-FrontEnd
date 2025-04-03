@@ -10,7 +10,7 @@ const CardCUTemplate = ({ printer }) => {
     const statusColor = {
         "En proceso": "#adaf4c",
         "En Espera": "#367ff4",
-        "Finalizado": "#1eff00",        
+        "Finalizado": "#4caf50",        
     }
     
     const getStatusColor = (status) =>{
