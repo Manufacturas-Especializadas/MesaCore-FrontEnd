@@ -5,11 +5,11 @@ export const siderbarData = [
     {
         name: "Home",
         icon: <DashboardIcon />,
-        path: "/dashboard",
+        path: "/",
     },
-    {
-        name: "Settings",
-        icon: <SettingsIcon />,
-        path: "/settings",
-    },
+    // {
+    //     name: "Settings",
+    //     icon: <SettingsIcon />,
+    //     path: "/settings",
+    // },
 ];
