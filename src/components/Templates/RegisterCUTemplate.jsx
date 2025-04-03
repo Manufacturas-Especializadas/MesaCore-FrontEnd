@@ -117,7 +117,14 @@ const RegisterCUTemplate = () => {
 
         try{
             const dataToSend = { ...formData };
+            
+            if (dataToSend.fai === "") {
+                dataToSend.fai = null;
+            };
 
+            if (dataToSend.comentarios === "") {
+                dataToSend.comentarios = null;
+            };
             
             const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Registrar", {
                 method: "POST",
