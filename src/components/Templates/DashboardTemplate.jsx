@@ -22,7 +22,7 @@ const DashboardTemplate = () => {
         const fetchPrinters = async () => {
             setLoading(true);
             try {
-                const response = await fetch("https://localhost:44350/api/ImpresorasCobre/Obtener");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Obtener");
                 if (!response.ok) {
                     throw new Error("Error en el fetching");
                 }
@@ -41,7 +41,7 @@ const DashboardTemplate = () => {
         const fetchPrintersAluminio = async () => {
             setLoading(true);
             try {
-                const response = await fetch("https://localhost:44350/api/Impresoras/Obtener");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Obtener");
                 if (!response.ok) {
                     throw new Error("Error en el fetching");
                 }

@@ -37,7 +37,7 @@ const EditALTemplate = () => {
 
         const getPrinterById = async () => {
             try {
-                const response = await fetch(`https://localhost:44350/api/Impresoras/ObtenerImpresoraPorId/${id}`);
+                const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerImpresoraPorId/${id}`);
                 
                 if (!response.ok) {
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -62,7 +62,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getPlanta = async () =>{
             try{
-                const reponse = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaPlanta");
+                const reponse = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaPlanta");
                 const data = await reponse.json();
                 setPlanta(data);
             }catch(error){
@@ -76,7 +76,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const fetchEstatus = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaEstatusProyecto");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaEstatusProyecto");
     
                 if(!response.ok){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
@@ -95,7 +95,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getCliente = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaCliente");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaCliente");
                 const data = await response.json();
                 setCliente(data);
             }catch(error){
@@ -108,7 +108,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getSolicitante = async () =>{
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaSolicitante");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaSolicitante");
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
@@ -121,7 +121,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getEstatus = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaEstatus");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaEstatus");
                 const data = await response.json();
                 setEstatus(data);
             }catch(error){
@@ -164,7 +164,7 @@ const EditALTemplate = () => {
             dataToSend.comentarios = null;
         }
 
-        const response = await fetch("https://localhost:44350/api/Impresoras/Actualizar", {
+        const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Actualizar", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

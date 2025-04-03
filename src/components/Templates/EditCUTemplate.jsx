@@ -75,7 +75,7 @@ const EditCUTemplate = () => {
     useEffect(() => {     
         const fetchEstatus = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaEstatusProyecto");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaEstatusProyecto");
     
                 if(!response.ok){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
@@ -94,7 +94,7 @@ const EditCUTemplate = () => {
     useEffect(() => {
         const getCliente = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaCliente");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaCliente");
                 const data = await response.json();
                 setCliente(data);
             }catch(error){
@@ -107,7 +107,7 @@ const EditCUTemplate = () => {
     useEffect(() => {
         const getSolicitante = async () =>{
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaSolicitante");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaSolicitante");
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
@@ -120,7 +120,7 @@ const EditCUTemplate = () => {
     useEffect(() => {
         const getEstatus = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaEstatus");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaCliente");
                 const data = await response.json();
                 setEstatus(data);
             }catch(error){
@@ -163,7 +163,7 @@ const EditCUTemplate = () => {
             dataToSend.comentarios = null;
         }
 
-        const response = await fetch("https://localhost:44350/api/ImpresorasCobre/Actualizar", {
+        const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Actualizar", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

@@ -9,7 +9,7 @@ const DetailsALTemplate = ({ show, handlClose, printerId }) => {
             if(!printerId) return;
 
             try{
-                const response = await fetch(`https://localhost:44350/api/Impresoras/ObtenerImpresoraPorId/${printerId}`);
+                const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerImpresoraPorId/${printerId}`);
                 if(!response){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
                 };

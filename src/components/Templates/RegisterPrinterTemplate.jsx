@@ -76,7 +76,7 @@ const RegisterPrinterTemplate = () => {
             formDataToSend.append("comentarios", formData.comentarios);
             formDataToSend.append("formfile", formData.archivo);
 
-            const response = await fetch("https://localhost:44350/api/ImpresorasDashboard/Registro", {
+            const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasDashboard/Registro", {
                 method: "POST",
                 body: formDataToSend,
             });

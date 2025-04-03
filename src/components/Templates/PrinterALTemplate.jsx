@@ -113,7 +113,7 @@ const PrinterALTemplate = () => {
 
     const handleDelete = async () => {
         try{
-            const response = await fetch(`https://localhost:44350/api/Impresoras/Eliminar/${selectedPrinterId}`,{
+            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Eliminar${selectedPrinterId}`,{
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -143,7 +143,7 @@ const PrinterALTemplate = () => {
             try{
                 setLoading(true);
 
-                let url = `https://localhost:44350/api/Impresoras/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
+                let url = `https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
                 if (filters.codigo) {
                     url += `&codigo=${filters.codigo}`;
                 }

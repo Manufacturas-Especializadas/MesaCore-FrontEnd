@@ -31,7 +31,7 @@ const RegisterCUTemplate = () => {
     useEffect(() => {
         const getPlanta = async () =>{
             try{
-                const reponse = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaPlanta");
+                const reponse = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaPlanta");
                 const data = await reponse.json();
                 setPlanta(data);
             }catch(error){
@@ -45,7 +45,7 @@ const RegisterCUTemplate = () => {
     useEffect(() => {     
         const fetchEstatus = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaEstatusProyecto");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaEstatusProyecto");
     
                 if(!response.ok){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
@@ -64,7 +64,7 @@ const RegisterCUTemplate = () => {
     useEffect(() => {
         const getCliente = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaCliente");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaCliente");
                 const data = await response.json();
                 setCliente(data);
             }catch(error){
@@ -77,7 +77,7 @@ const RegisterCUTemplate = () => {
     useEffect(() => {
         const getSolicitante = async () =>{
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaSolicitante");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaSolicitante");
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
@@ -90,7 +90,7 @@ const RegisterCUTemplate = () => {
     useEffect(() => {
         const getEstatus = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaEstatus");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaEstatus");
                 const data = await response.json();
                 setEstatus(data);
             }catch(error){
@@ -114,7 +114,7 @@ const RegisterCUTemplate = () => {
                 dataToSend.comentarios = null;
             }
 
-            const response = await fetch("https://localhost:44350/api/ImpresorasCobre/Registrar", {
+            const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Registrar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

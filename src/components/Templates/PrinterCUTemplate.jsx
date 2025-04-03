@@ -112,7 +112,7 @@ const PrinterCUTemplate = () => {
 
     const handleDelete = async () => {
         try{
-            const response = await fetch(`https://localhost:44350/api/ImpresorasCobre/Eliminar/${selectedPrinterId}`,{
+            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Eliminar/${selectedPrinterId}`,{
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -140,7 +140,7 @@ const PrinterCUTemplate = () => {
     useEffect(() => {
         const fetchPrinters = async () => {
             try{
-                let url = `https://localhost:44350/api/ImpresorasCobre/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
+                let url = `https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
                 if (filters.codigo) {
                     url += `&codigo=${filters.codigo}`;
                 }
