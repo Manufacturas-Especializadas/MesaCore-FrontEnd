@@ -29,7 +29,7 @@ const CardCUTemplate = ({ printer }) => {
 
     const fetchPrintersDetails = async (id) => {
         try {
-            const response = await fetch(`https://localhost:44350/api/ImpresorasCobre/ObtenerImpresorasCobrePorNombreProyecto/${id}`);
+            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerImpresorasCobrePorNombreProyecto/${id}`);
             if (!response.ok) {
                 throw new Error(`Error al cargar los datos: ${response.statusText}`);
             }

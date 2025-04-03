@@ -9,7 +9,7 @@ const CardALTemplate = ({ printer }) => {
 
     const fetchPrintersDetails = async (nombreDelProyecto) => {
         try {
-            const response = await fetch(`https://localhost:44350/api/Impresoras/ObtenerImpresorasAluminioPorNombreProyecto/${encodeURIComponent(nombreDelProyecto)}`);
+            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerImpresorasAluminioPorNombreProyecto/${encodeURIComponent(nombreDelProyecto)}`);
             if (!response.ok) {
                 throw new Error(`Error al cargar los datos: ${response.statusText}`);
             }
