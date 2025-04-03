@@ -134,7 +134,7 @@ const RegisterCUTemplate = () => {
                 dataToSend.liberacionLaboratorio = null
             };
             
-            const response = await fetch("https://localhost:44350/api/ImpresorasCobre/Registrar", {
+            const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Registrar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
