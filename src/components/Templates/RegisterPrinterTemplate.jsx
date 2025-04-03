@@ -33,7 +33,7 @@ const RegisterPrinterTemplate = () => {
     useEffect(() =>{
         const getSolicitante = async () =>{
             try{
-                const response = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaSolicitante");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaSolicitante");
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
