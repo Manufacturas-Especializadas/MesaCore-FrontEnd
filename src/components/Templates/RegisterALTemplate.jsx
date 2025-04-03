@@ -14,6 +14,7 @@ const RegisterALTemplate = () => {
         entregaLaboratorio: "",
         fai: "",
         liberacionLaboratorio: "",
+        fechaDeLaSolicitud: "",
         estatusId: "",
         comentarios: "",
         nombreDelProyecto: "",
@@ -204,6 +205,16 @@ const RegisterALTemplate = () => {
                                 </MenuItem>
                             ))}
                         </TextField>
+
+                        <TextField
+                            fullWidth
+                            type="date"
+                            variant="outlined"
+                            name="fechaDeLaSolicitud"
+                            helperText="Fecha de la solicitud del proyecto"
+                            value={ formData.fechaDeLaSolicitud || "" }
+                            onChange={ handleChange }
+                        />
 
                         <TextField
                             fullWidth

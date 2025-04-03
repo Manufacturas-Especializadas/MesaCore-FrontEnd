@@ -14,6 +14,7 @@ const RegisterCUTemplate = () => {
         entregaLaboratorio: "",
         fai: "",
         liberacionLaboratorio: "",
+        fechaDeLaSolicitud: "",
         estatusId: "",
         comentarios: "",
         nombreDelProyecto: "",
@@ -206,6 +207,16 @@ const RegisterCUTemplate = () => {
                                 </MenuItem>
                             ))}
                         </TextField>
+
+                        <TextField
+                            fullWidth
+                            type="date"
+                            variant="outlined"
+                            name="fechDeLaSolicitud"
+                            helperText="Fecha de la solicitud del proyecto"
+                            value={ formData.fechaDeLaSolicitud || "" }
+                            onChange={ handleChange }
+                        />
 
                         <TextField
                             fullWidth

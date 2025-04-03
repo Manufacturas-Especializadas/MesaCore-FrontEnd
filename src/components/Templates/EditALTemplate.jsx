@@ -15,6 +15,8 @@ const EditALTemplate = () => {
         entregaLaboratorio: "",
         fai: "",
         liberacionLaboratorio: "",
+        fechaDeLaSolicitud: "",
+        nombreDelProyecto: "",
         estatusId: "",
         comentarios: "",
         estatusProyectoId: "",
@@ -190,6 +192,56 @@ const EditALTemplate = () => {
                     <h2 className="card-title"> EDITAR - FX </h2>
 
                     <form onSubmit={ handleSubmit } className="card-form">
+
+                        <TextField
+                            fullWidth
+                            label="Nombre del proyecto"
+                            required
+                            variant="outlined"
+                            name="nombreDelProyecto"
+                            value={ formData.nombreDelProyecto || "" }
+                            onChange={ handleChange }
+                        />
+
+                        <TextField
+                            fullWidth
+                            select
+                            required
+                            variant="outlined"
+                            label="Estatus del proyecto"
+                            name="estatusProyectoId"
+                            value={
+                                estatusProyecto.some((item) => item.id === formData.estatusProyectoId)
+                                    ? formData.estatusProyectoId
+                                    : ""
+                            }
+                            disabled={ estatusProyecto.length === 0 }
+                            onChange={ handleChange }
+                            sx={{
+                                minWidth: "200px",
+                                mr: 5,
+                                "& .MuiInputBase-root": {
+                                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                                },
+                            }}
+                        >                            
+                            {estatusProyecto.map((item) => (
+                                <MenuItem key={ item.id } value={ item.id }>
+                                    { item.nombre }
+                                </MenuItem>
+                            ))}
+                        </TextField>
+
+                        <TextField
+                            fullWidth
+                            type="date"
+                            variant="outlined"
+                            name="fechaDeLaSolicitud"
+                            helperText="Fecha de la solicitud del proyecto"
+                            value={ formData.fechaDeLaSolicitud || "" }
+                            onChange={ handleChange }
+                        />
+
                         <TextField
                             fullWidth
                             variant="outlined"
@@ -202,6 +254,7 @@ const EditALTemplate = () => {
                         <TextField
                             select
                             fullWidth
+                            required
                             variant="outlined"
                             label="Solicitante"
                             name="solicitanteId"
@@ -221,6 +274,7 @@ const EditALTemplate = () => {
                         <TextField
                             select
                             fullWidth
+                            required
                             variant="outlined"
                             label="Planta"
                             name="plantaId"
@@ -240,6 +294,7 @@ const EditALTemplate = () => {
                         <TextField
                             select
                             fullWidth
+                            required
                             variant="outlined"
                             label="Cliente"
                             name="clienteId"
@@ -307,6 +362,7 @@ const EditALTemplate = () => {
 
                         <TextField
                             select
+                            required
                             variant="outlined"
                             label="Estatus"
                             name="estatusId"
@@ -344,34 +400,6 @@ const EditALTemplate = () => {
                             value={ formData.comentarios || "" }
                             onChange={ handleChange }
                         />
-
-                        <TextField
-                            fullWidth
-                            select
-                            variant="outlined"
-                            label="Estatus del proyecto"
-                            name="estatusProyectoId"
-                            value={
-                                estatusProyecto.some((item) => item.id === formData.estatusProyectoId)
-                                    ? formData.estatusProyectoId
-                                    : ""
-                            }
-                            disabled={ estatusProyecto.length === 0 }
-                            onChange={ handleChange }
-                            sx={{
-                                minWidth: "200px",
-                                mr: 5,
-                                "& .MuiInputBase-root": {
-                                    fontSize: { xs: "0.875rem", sm: "1rem" },
-                                },
-                            }}
-                        >                            
-                            {estatusProyecto.map((item) => (
-                                <MenuItem key={ item.id } value={ item.id }>
-                                    { item.nombre }
-                                </MenuItem>
-                            ))}
-                        </TextField>
 
                         <div className="card-actions">
                             <Button

@@ -27,6 +27,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -181,6 +182,12 @@ const PrinterALTemplate = () => {
         <>
             <TableContainer component={ Paper } sx={{ padding: 5 }}>
                 <Box sx={{ display: 'flex', flexDirection:{ xs:"column", sm:"row" }, justifyContent: "space-between", alignItems: "center" }}>
+                    <IconButton
+                        sx={{ p: 2, mr: 3, color: "black" }}
+                        onClick={() => handleNavigate("/settings/printers")}
+                    >
+                        <ArrowBackIcon/>
+                    </IconButton>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mb:{ xs:2, sm: 0 }, mr: 3 }}>
                         REGISTRO - FIXTURES - AL
                     </Typography>
