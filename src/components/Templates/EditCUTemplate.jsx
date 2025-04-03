@@ -36,7 +36,7 @@ const EditCUTemplate = () => {
 
         const getPrinterById = async () => {
             try {
-                const response = await fetch(`https://localhost:44350/api/ImpresorasCobre/ObtenerImpresoraCobrePorId/${id}`);
+                const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerImpresoraCobrePorId/${id}`);
                 
                 if (!response.ok) {
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -61,7 +61,7 @@ const EditCUTemplate = () => {
     useEffect(() => {
         const getPlanta = async () =>{
             try{
-                const reponse = await fetch("https://localhost:44350/api/Impresoras/ObtenerListaPlanta");
+                const reponse = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaPlanta");
                 const data = await reponse.json();
                 setPlanta(data);
             }catch(error){
@@ -190,6 +190,46 @@ const EditCUTemplate = () => {
                     <h2 className="card-title"> EDITAR - FX </h2>
 
                     <form onSubmit={ handleSubmit } className="card-form">
+
+                        <TextField
+                            fullWidth
+                            label="Nombre del proyecto"
+                            required
+                            variant="outlined"
+                            name="nombreDelProyecto"
+                            value={ formData.nombreDelProyecto || "" }
+                            onChange={ handleChange }
+                        />
+
+                        <TextField
+                            required
+                            fullWidth
+                            select                            
+                            variant="outlined"
+                            label="Estatus del proyecto"
+                            name="estatusProyectoId"
+                            value={
+                                estatusProyecto.some((item) => item.id === formData.estatusProyectoId)
+                                    ? formData.estatusProyectoId
+                                    : ""
+                            }
+                            disabled={ estatusProyecto.length === 0 }
+                            onChange={ handleChange }
+                            sx={{
+                                minWidth: "200px",
+                                mr: 5,
+                                "& .MuiInputBase-root": {
+                                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                                },
+                            }}
+                        >                            
+                            {estatusProyecto.map((item) => (
+                                <MenuItem key={ item.id } value={ item.id }>
+                                    { item.nombre }
+                                </MenuItem>
+                            ))}
+                        </TextField>
+
                         <TextField
                             fullWidth
                             variant="outlined"
@@ -201,6 +241,7 @@ const EditCUTemplate = () => {
 
                         <TextField
                             select
+                            required
                             fullWidth
                             variant="outlined"
                             label="Solicitante"
@@ -220,6 +261,7 @@ const EditCUTemplate = () => {
 
                         <TextField
                             select
+                            required
                             fullWidth
                             variant="outlined"
                             label="Planta"
@@ -239,6 +281,7 @@ const EditCUTemplate = () => {
 
                         <TextField
                             select
+                            required
                             fullWidth
                             variant="outlined"
                             label="Cliente"
@@ -286,27 +329,28 @@ const EditCUTemplate = () => {
                         />
                     
                         <TextField
-                            type="date"
                             fullWidth
+                            type="date"
                             variant="outlined"
-                            label="Entrega laboratorio"
                             name="entregaLaboratorio"
+                            helperText="Entrega laboratorio"
                             value={ formData.entregaLaboratorio || ""}
                             onChange={ handleChange }
                         />
 
                         <TextField
-                            type="date"
                             fullWidth
+                            type="date"
                             variant="outlined"
-                            label="Liberación laboratorio"
                             name="liberacionLaboratorio"
+                            helperText="Liberación laboratorio"
                             value={ formData.liberacionLaboratorio || "" }
                             onChange={ handleChange }
                         />
 
                         <TextField
                             select
+                            required
                             variant="outlined"
                             label="Estatus"
                             name="estatusId"
@@ -344,34 +388,6 @@ const EditCUTemplate = () => {
                             value={ formData.comentarios || "" }
                             onChange={ handleChange }
                         />
-
-                        <TextField
-                            fullWidth
-                            select
-                            variant="outlined"
-                            label="Estatus del proyecto"
-                            name="estatusProyectoId"
-                            value={
-                                estatusProyecto.some((item) => item.id === formData.estatusProyectoId)
-                                    ? formData.estatusProyectoId
-                                    : ""
-                            }
-                            disabled={ estatusProyecto.length === 0 }
-                            onChange={ handleChange }
-                            sx={{
-                                minWidth: "200px",
-                                mr: 5,
-                                "& .MuiInputBase-root": {
-                                    fontSize: { xs: "0.875rem", sm: "1rem" },
-                                },
-                            }}
-                        >                            
-                            {estatusProyecto.map((item) => (
-                                <MenuItem key={ item.id } value={ item.id }>
-                                    { item.nombre }
-                                </MenuItem>
-                            ))}
-                        </TextField>
 
                         <div className="card-actions">
                             <Button

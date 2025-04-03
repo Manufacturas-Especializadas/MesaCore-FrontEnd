@@ -100,20 +100,24 @@ const RegisterCUTemplate = () => {
         getEstatus();
     }, []);
 
+    function convertyEmptyToNull(data) {
+        const newData = { ...data };
+        for(const key in newData){
+            if(typeof newData[key] === "string" && newData[key].trim() === ""){
+                newData[key] = null
+            }
+        }
+
+        return newData;
+    };
+
     const handleSubmit = async (e) =>{
         e.preventDefault();
 
         try{
             const dataToSend = { ...formData };
 
-            if (dataToSend.fai === "") {
-                dataToSend.fai = null;
-            }
-
-            if (dataToSend.comentarios === "") {
-                dataToSend.comentarios = null;
-            }
-
+            
             const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Registrar", {
                 method: "POST",
                 headers: {
@@ -167,6 +171,7 @@ const RegisterCUTemplate = () => {
                         <TextField
                             fullWidth
                             label="Nombre del proyecto"
+                            required
                             variant="outlined"
                             name="nombreDelProyecto"
                             value={ formData.nombreDelProyecto || "" }
@@ -174,8 +179,9 @@ const RegisterCUTemplate = () => {
                         />
 
                         <TextField
+                            required
                             fullWidth
-                            select
+                            select                            
                             variant="outlined"
                             label="Estatus del proyecto"
                             name="estatusProyectoId"
@@ -215,6 +221,7 @@ const RegisterCUTemplate = () => {
                             variant="outlined"
                             label="Solicitante"
                             name="solicitanteId"
+                            required
                             value={ solicitante.some((item) => item.id === formData.solicitanteId) ? formData.solicitanteId : "" }
                             disabled={ solicitante.length === 0 }
                             onChange={ handleChange }
@@ -233,6 +240,7 @@ const RegisterCUTemplate = () => {
                             variant="outlined"
                             label="Planta"
                             name="plantaId"
+                            required
                             value={ planta.some((item) => item.id === formData.plantaId) ? formData.plantaId : "" }
                             disabled={ planta.length === 0 }
                             onChange={ handleChange }
@@ -252,6 +260,7 @@ const RegisterCUTemplate = () => {
                         variant="outlined"
                         label="Cliente"
                         name="clienteId"
+                        required
                         value={ cliente.some((item) => item.id === formData.clienteId) ? formData.clienteId : "" }
                         disabled={ cliente.length === 0 }
                         onChange={ handleChange }

@@ -167,6 +167,7 @@ const RegisterALTemplate = () => {
                     <form className="card-form" onSubmit={ handleSubmit }>                        
                         
                         <TextField
+                            required
                             fullWidth
                             label="Nombre del proyecto"
                             variant="outlined"
@@ -176,8 +177,9 @@ const RegisterALTemplate = () => {
                         />
 
                         <TextField
-                            fullWidth
                             select
+                            required
+                            fullWidth
                             variant="outlined"
                             label="Estatus del proyecto"
                             name="estatusProyectoId"
@@ -232,6 +234,7 @@ const RegisterALTemplate = () => {
 
                         <TextField
                             select
+                            required
                             variant="outlined"
                             label="Planta"
                             name="plantaId"
@@ -250,6 +253,7 @@ const RegisterALTemplate = () => {
 
                     <TextField
                         select
+                        required
                         fullWidth
                         variant="outlined"
                         label="Cliente"
@@ -296,8 +300,9 @@ const RegisterALTemplate = () => {
                     />
                 
                     <TextField
-                        type="date"
+                        required
                         fullWidth
+                        type="date"
                         variant="outlined"
                         name="entregaLaboratorio"
                         helperText="Entrega laboratorio"
@@ -306,8 +311,9 @@ const RegisterALTemplate = () => {
                     />
 
                     <TextField
-                        type="date"
+                        required
                         fullWidth
+                        type="date"
                         variant="outlined"
                         name="liberacionLaboratorio"
                         helperText="Liberación laboratorio"
@@ -317,6 +323,8 @@ const RegisterALTemplate = () => {
 
                     <TextField
                         select
+                        required
+                        fullWidth
                         variant="outlined"
                         label="Estatus"
                         name="estatusId"
