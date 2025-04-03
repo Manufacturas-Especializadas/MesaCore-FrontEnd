@@ -7,9 +7,9 @@ export const siderbarData = [
         icon: <DashboardIcon />,
         path: "/",
     },
-    // {
-    //     name: "Settings",
-    //     icon: <SettingsIcon />,
-    //     path: "/settings",
-    // },
+    {
+        name: "Settings",
+        icon: <SettingsIcon />,
+        path: "/settings",
+    },
 ];
