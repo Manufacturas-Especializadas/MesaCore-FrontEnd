@@ -18,8 +18,8 @@ const MyRoutes = () => {
     return (
         <>
             <Routes>
-                <Route path="/" element={<Login/>}/>
-                <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/" element={<Dashboard/>}/>
                 <Route path="/registerLogin" element={<Register/>}/>
                 <Route path="/register" element={<RegisterPrinter/>}/>
                 <Route path="/settings" element={<Settings/>}/>
