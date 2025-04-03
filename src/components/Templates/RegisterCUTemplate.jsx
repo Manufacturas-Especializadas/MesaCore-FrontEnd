@@ -212,7 +212,7 @@ const RegisterCUTemplate = () => {
                             fullWidth
                             type="date"
                             variant="outlined"
-                            name="fechDeLaSolicitud"
+                            name="fechaDeLaSolicitud"
                             helperText="Fecha de la solicitud del proyecto"
                             value={ formData.fechaDeLaSolicitud || "" }
                             onChange={ handleChange }
