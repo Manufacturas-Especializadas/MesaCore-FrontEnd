@@ -166,6 +166,14 @@ const EditALTemplate = () => {
             dataToSend.comentarios = null;
         }
 
+        if(dataToSend.entregaLaboratorio === ""){
+            dataToSend.entregaLaboratorio === null
+        };
+
+        if(dataToSend.liberacionLaboratorio === ""){
+            dataToSend.liberacionLaboratorio === null
+        };
+
         const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Actualizar", {
             method: 'PUT',
             headers: {

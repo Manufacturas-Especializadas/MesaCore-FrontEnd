@@ -109,11 +109,19 @@ const RegisterALTemplate = () => {
 
             if (dataToSend.fai === "") {
                 dataToSend.fai = null;
-            }
+            };
 
             if (dataToSend.comentarios === "") {
                 dataToSend.comentarios = null;
-            }
+            };
+
+            if(dataToSend.entregaLaboratorio === ""){
+                dataToSend.entregaLaboratorio = null;
+            };
+
+            if(dataToSend.liberacionLaboratorio === ""){
+                dataToSend.liberacionLaboratorio = null
+            };
 
             const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Registrar", {
                 method: "POST",
