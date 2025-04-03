@@ -114,7 +114,7 @@ const PrinterALTemplate = () => {
 
     const handleDelete = async () => {
         try{
-            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Eliminar${selectedPrinterId}`,{
+            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Eliminar/${selectedPrinterId}`,{
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
