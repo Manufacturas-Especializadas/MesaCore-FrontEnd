@@ -12,11 +12,13 @@ const PrivateRoute = ({ children, requireRole }) => {
         const decoded = jwtDecode(token);
         const userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-        if (!requireRole || requireRole.length === 0) {
+        const allowedRoles = Array.isArray(requireRole) ? requireRole : [requireRole];
+
+        if (!allowedRoles || allowedRoles.length === 0) {
             return children;
         }
-    
-        if (!Array.isArray(requireRole) || !requireRole.includes(userRole)) {
+
+        if (!allowedRoles.includes(userRole)) {
             return <Navigate to="/home" />;
         }
 
