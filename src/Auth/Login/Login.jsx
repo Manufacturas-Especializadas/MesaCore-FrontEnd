@@ -1,16 +1,15 @@
 import { Alert, Avatar, Box, Button, Container, Grid2, Paper, Snackbar, TextField, Typography } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Logo from "../../assets/logomesa.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const Login = () => {
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
-    const[error, setError] = useState(null);
     const[openSnackbar, setOpenSnackbar] = useState(false);
     const[snackbarMessage, setSnackbarMessage] = useState("");
     const[snackbarSeverity, setSnackbarSeverity] = useState("info");
+    const[sendingSnackbar, setSendingSnackbar] = useState(false);
     const navigate = useNavigate();
 
     const handleNavigate = (path) =>{
@@ -24,13 +23,15 @@ const Login = () => {
     const handleSubmit = async (e) =>{
         e.preventDefault();
 
+        setSendingSnackbar(true);
+
         const loginData = {
             correo: email,
             clave: password
         };
 
         try{
-            const response = await fetch("https://localhost:44350/api/Auth/Login", {
+            const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Auth/Login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -47,7 +48,7 @@ const Login = () => {
                 setOpenSnackbar(true);
 
                 setTimeout(() => {
-                    handleNavigate("/dashboard");
+                    handleNavigate("/home");
                 }, 3000);
 
             }else{
@@ -60,7 +61,9 @@ const Login = () => {
             setSnackbarSeverity("error");
             setOpenSnackbar(true);
             console.log(`Error: ${error}`);
-        }
+        }finally{
+            setSendingSnackbar(false);
+        }        
     };
 
     return (
@@ -130,13 +133,6 @@ const Login = () => {
                             Iniciar sesión
                         </Button>
 
-                        <Grid2 container justifyContent="flex-end">
-                            <Grid2>
-                                <Link href="/registerLogin" variant="body2">
-                                    Registrate
-                                </Link>
-                            </Grid2>
-                        </Grid2>
                     </Box>
                 </Paper>
             </Container>
@@ -144,6 +140,12 @@ const Login = () => {
             <Snackbar open={ openSnackbar } autoHideDuration={ 3000 } onClose={ handleCloseSnackbar } anchorOrigin={{ vertical: "top", horizontal: "right" }}>
                 <Alert onClose={ handleCloseSnackbar } severity={ snackbarSeverity } sx={{ width: '100%' }} variant="filled">
                     { snackbarMessage }
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={ sendingSnackbar } anchorOrigin={{ vertical: "top", horizontal: "right" }}>
+                <Alert severity="info" sx={{ width: "100%" }} variant="filled">
+                    Ingresando...
                 </Alert>
             </Snackbar>
         </>
