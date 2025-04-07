@@ -13,25 +13,78 @@ import Login from "../Auth/Login/Login";
 import Register from "../Auth/Register/Register";
 import Impressions from "../pages/Settings/StatisticalImpressions/Impressions";
 import RegisterImpressions from "../pages/Settings/StatisticalImpressions/RegisterImpressions";
+import PrivateRoute from "../Auth/PrivateRoute";
 
 const MyRoutes = () => {
     return (
         <>
             <Routes>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/" element={<Dashboard/>}/>
-                <Route path="/registerLogin" element={<Register/>}/>
-                <Route path="/register" element={<RegisterPrinter/>}/>
-                <Route path="/settings" element={<Settings/>}/>
-                <Route path="/settings/impressions" element={<Impressions/>}/>
-                <Route path="/settings/impressions/register" element={<RegisterImpressions/>}/>
-                <Route path="/settings/printers" element={<Printers/>}/>
-                <Route path="/settings/printers/cu" element={<PrintersCu/>}/>
-                <Route path="/settings/printers/cu/register" element={<RegisterCu/>}/>
-                <Route path="/settings/printers/cu/edit/:id" element={<EditCu/>}/>
-                <Route path="/settings/printers/al" element={<PrintersAL/>}/>
-                <Route path="/settings/printers/al/register" element={<RegisterAL/>}/>
-                <Route path="/settings/printers/al/edit/:id" element={<EditAL/>}/>
+                <Route path="/" element={<Login/>}/>
+                <Route path="/home" element={
+                    <PrivateRoute requireRole={['Admin', 'Empleado', 'Gerente', 'Jefe']}>
+                        <Dashboard/>        
+                    </PrivateRoute>
+                }/>
+                <Route path="/register" element={
+                    <PrivateRoute requireRole={['Admin', 'Empleado', 'Gerente', 'Jefe']}>
+                        <RegisterPrinter/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/registerLogin" element={
+                    <PrivateRoute requireRole="Admin">
+                        <Register/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings" element={
+                    <PrivateRoute requireRole="Admin">
+                        <Settings/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/impressions" element={
+                    <PrivateRoute requireRole="Admin">
+                        <Impressions/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/impressions/register" element={
+                    <PrivateRoute requireRole="Admin">
+                        <RegisterImpressions/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/printers" element={
+                    <PrivateRoute requireRole="Admin">
+                        <Printers/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/printers/cu" element={
+                    <PrivateRoute requireRole="Admin">
+                        <PrintersCu/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/printers/cu/register" element={
+                    <PrivateRoute requireRole="Admin">
+                        <RegisterCu/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/printers/cu/edit/:id" element={
+                    <PrivateRoute requireRole="Admin">
+                        <EditCu/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/printers/al" element={
+                    <PrivateRoute requireRole="Admin">
+                        <PrintersAL/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/printers/al/register" element={
+                    <PrivateRoute requireRole="Admin">
+                        <RegisterAL/>
+                    </PrivateRoute>
+                }/>
+                <Route path="/settings/printers/al/edit/:id" element={
+                    <PrivateRoute requireRole="Admin">
+                        <EditAL/>
+                    </PrivateRoute>
+                }/>
             </Routes>
         </>
     )
