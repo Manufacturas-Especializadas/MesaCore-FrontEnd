@@ -55,7 +55,7 @@ const DetailsCardALTemplate = ({ printer, onClose }) => {
                 </svg>
             </IconButton>
 
-            <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
+            <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
                 Detalles del Proyecto
             </Typography>                
 
