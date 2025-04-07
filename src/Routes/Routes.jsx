@@ -41,7 +41,7 @@ const MyRoutes = () => {
                     </PrivateRoute>
                 }/>
                 <Route path="/settings/impressions" element={
-                    <PrivateRoute requireRole="Admin">
+                    <PrivateRoute requireRole={['Admin']}>
                         <Impressions/>
                     </PrivateRoute>
                 }/>
