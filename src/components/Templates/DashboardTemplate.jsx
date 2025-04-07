@@ -2,9 +2,10 @@ import { Box, CircularProgress, Grid2, Tab, Tabs, Typography } from "@mui/materi
 import { useEffect, useState } from "react";
 import CardCUTemplate from "../Card/CardCUTemplate";
 import RequestNewPrintTemplate from "./RequestNewPrintTemplate";
-import FilterSectionDashboard from "./FilterSectionDashboard";
 import { useNavigate } from "react-router-dom";
 import CardALTemplate from "../Card/CardALTemplate";
+import { getAuthHeaders } from "../../utils/AuthHeaders";
+
 
 const DashboardTemplate = () => {
     const[printerAluminio, setPrinterAluminio] = useState([]);
@@ -13,19 +14,32 @@ const DashboardTemplate = () => {
     const[loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
+    }
+
+    const handleNavigate = (path) => {
+        navigate(path);
     }
 
     useEffect(() => {
         const fetchPrinters = async () => {
             setLoading(true);
             try {
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Obtener");
-                if (!response.ok) {
-                    throw new Error("Error en el fetching");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Obtener", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type" : "application/json",
+                        ...getAuthHeaders()
+                    }
+                });
+
+                if(response.status === 401){
+                    localStorage.removeItem("token");
+                    handleNavigate("/login");
+                    return
                 }
+
                 const data = await response.json();
                 setPrinterCobre(data);
             } catch (error) {
@@ -41,9 +55,17 @@ const DashboardTemplate = () => {
         const fetchPrintersAluminio = async () => {
             setLoading(true);
             try {
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Obtener");
-                if (!response.ok) {
-                    throw new Error("Error en el fetching");
+                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Obtener", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...getAuthHeaders()
+                    }
+                });
+                if(response.status === 401){
+                    localStorage.removeItem("token");
+                    handleNavigate("/login");
+                    return
                 }
                 const data = await response.json();
                 setPrinterAluminio(data);
@@ -55,10 +77,6 @@ const DashboardTemplate = () => {
         };
         fetchPrintersAluminio();
     }, []);
-
-    // const filteredPrinters = printer.filter((item) => 
-    //     value === 0 ? item.material === "Cobre" : item.material === "Aluminio"
-    // )
 
     return (
         <>
