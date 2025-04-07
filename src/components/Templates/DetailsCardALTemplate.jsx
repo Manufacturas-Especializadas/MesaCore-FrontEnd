@@ -1,5 +1,4 @@
 import { Chip ,Divider, IconButton, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
 
 const DetailsCardALTemplate = ({ printer, onClose }) => {
 
