@@ -28,6 +28,7 @@ const RegisterPrinterTemplate = () => {
     const[fileName, setFileName] = useState("");
     const[openSnackbar, setOpenSnackbar] = useState(false);
     const[openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
+    const[sendingSnackbar, setSendingSnackbar] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() =>{
@@ -68,6 +69,8 @@ const RegisterPrinterTemplate = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        setSendingSnackbar(true);
+
         try{
             const formDataToSend = new FormData();
             formDataToSend.append("nombreDelProyecto", formData.nombreDelProyecto);
@@ -102,6 +105,8 @@ const RegisterPrinterTemplate = () => {
         }catch(error){
             console.error(`Error al enviar los datos: ${error}`);
             setOpenErrorSnackbar(true);
+        }finally{
+            setSendingSnackbar(false);
         }
     }
 
@@ -268,12 +273,10 @@ const RegisterPrinterTemplate = () => {
                         variant="outlined"
                         color="error"
                         fullWidth={{ xs: true, sm: false }}
-                        onClick={() => handleNavigate("/")}
+                        onClick={() => handleNavigate("/home")}
                         sx={{
                             textTransform: "none",
                             fontWeight: "bold",
-                            px: 4,
-                            py: 1.5,
                             borderRadius: "8px",
                             fontSize: { xs: "0.875rem", sm: "1rem" },
                         }}
@@ -289,13 +292,11 @@ const RegisterPrinterTemplate = () => {
                         sx={{
                             textTransform: "none",
                             fontWeight: "bold",
-                            px: 4,
-                            py: 1.5,
                             borderRadius: "8px",
                             fontSize: { xs: "0.875rem", sm: "1rem" },
                         }}
                     >
-                        REGISTRAR
+                        ENVIAR
                     </Button>
                 </Box>
             </Paper>
@@ -319,6 +320,15 @@ const RegisterPrinterTemplate = () => {
             >
                 <Alert onClose={() => setOpenErrorSnackbar(false) } severity="error" sx={{ width: "100%" }} variant="filled">
                     Hubo un error en la solicitud
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={ sendingSnackbar }
+                anchorOrigin={ { vertical: "top", horizontal: "right" }}                
+            >
+                <Alert severity="info" sx={{ width: "100%" }} variant="filled">
+                    Enviando...
                 </Alert>
             </Snackbar>
         </>
