@@ -2,6 +2,7 @@ import { Box, Button, Card, CardContent, Chip, Dialog, DialogContent, Typography
 import { AccessTime as AccessTimeIcon, Person as PersonIcon } from "@mui/icons-material";
 import { useState } from "react";
 import DetailsCardALTemplate from "../Templates/DetailsCardALTemplate";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const CardALTemplate = ({ printer }) => {
     const[selectedPrinterId, setSelectedPrinterId] = useState(null);
@@ -15,6 +16,7 @@ const CardALTemplate = ({ printer }) => {
             }
 
             const data = await response.json();
+            console.log(data);
             setPrintersDetails(data);
         } catch (error) {
             console.error(`Error: ${error}`);
