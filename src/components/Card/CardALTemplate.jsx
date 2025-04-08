@@ -16,7 +16,6 @@ const CardALTemplate = ({ printer }) => {
             }
 
             const data = await response.json();
-            console.log(data);
             setPrintersDetails(data);
         } catch (error) {
             console.error(`Error: ${error}`);
