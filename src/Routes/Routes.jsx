@@ -35,11 +35,14 @@ const MyRoutes = () => {
                         <Register/>
                     </PrivateRoute>
                 }/>
-                <Route path="/settings" element={
-                    <PrivateRoute requireRole="Admin">
-                        <Settings/>
-                    </PrivateRoute>
-                }/>
+                <Route
+                    path="/settings"
+                    element={
+                        <PrivateRoute requireRole={['Admin']}>
+                            <Settings />
+                        </PrivateRoute>
+                    }
+                />
                 <Route path="/settings/impressions" element={
                     <PrivateRoute requireRole={['Admin']}>
                         <Impressions/>
