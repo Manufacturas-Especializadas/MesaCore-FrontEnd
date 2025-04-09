@@ -28,6 +28,7 @@ import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import config from "../../../config";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -114,7 +115,7 @@ const PrinterALTemplate = () => {
 
     const handleDelete = async () => {
         try{
-            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Eliminar/${selectedPrinterId}`,{
+            const response = await fetch(`${config.apiUrl}/Impresoras/Eliminar/${selectedPrinterId}`,{
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -144,7 +145,7 @@ const PrinterALTemplate = () => {
             try{
                 setLoading(true);
 
-                let url = `https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
+                let url = `${config.apiUrl}/Impresoras/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
                 if (filters.codigo) {
                     url += `&codigo=${filters.codigo}`;
                 }
@@ -158,7 +159,6 @@ const PrinterALTemplate = () => {
                     throw new Error("Error en el fetching");
                 }
                 const data = await response.json();
-                console.log(data);
                 setPrinters(data.data);
                 setTotalRecords(data.totalRecords);
 
