@@ -5,6 +5,7 @@ import RequestNewPrintTemplate from "./RequestNewPrintTemplate";
 import { useNavigate } from "react-router-dom";
 import CardALTemplate from "../Card/CardALTemplate";
 import { getAuthHeaders } from "../../utils/AuthHeaders";
+import config from "../../../config";
 
 
 const DashboardTemplate = () => {
@@ -26,7 +27,7 @@ const DashboardTemplate = () => {
         const fetchPrinters = async () => {
             setLoading(true);
             try {
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Obtener", {
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Obtener`, {
                     method: "GET",
                     headers: {
                         "Content-Type" : "application/json",
@@ -55,7 +56,7 @@ const DashboardTemplate = () => {
         const fetchPrintersAluminio = async () => {
             setLoading(true);
             try {
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Obtener", {
+                const response = await fetch(`${config.apiUrl}/Impresoras/Obtener`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
