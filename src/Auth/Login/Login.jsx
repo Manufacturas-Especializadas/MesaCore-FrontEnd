@@ -2,6 +2,7 @@ import { Alert, Avatar, Box, Button, Container, Grid2, Paper, Snackbar, TextFiel
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import config from "../../../config";
 
 const Login = () => {
     const[email, setEmail] = useState("");
@@ -31,7 +32,7 @@ const Login = () => {
         };
 
         try{
-            const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Auth/Login", {
+            const response = await fetch(`${config.apiUrl}/Auth/Login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
