@@ -1,6 +1,22 @@
-import { Alert, Button, MenuItem, Snackbar, TextField } from "@mui/material"
+import { Alert, Button, MenuItem, Snackbar, TextField, styled, Typography } from "@mui/material"
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import config from "../../../config";
+
+
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
+
 
 const RegisterALTemplate = () => {
     const[formData, setFormData] = useState({
@@ -11,12 +27,13 @@ const RegisterALTemplate = () => {
         nDibujo: "",
         nParte: "",
         revision: "",
-        entregaLaboratorio: "",
+        entregaLaboratorio: null,
         fai: "",
-        liberacionLaboratorio: "",
+        liberacionLaboratorio: null,
         fechaDeLaSolicitud: "",
         estatusId: "",
         comentarios: "",
+        archivoFai: null,
         nombreDelProyecto: "",
         estatusProyectoId: ""
     });
@@ -27,12 +44,13 @@ const RegisterALTemplate = () => {
     const[estatusProyecto, setEstatusProyecto] = useState([]);
     const[estatus, setEstatus] = useState([]);
     const[openSnackbar, setOpenSnackbar] = useState(false);
+    const[fileName, setFileName] = useState("");
     const navigate = useNavigate();    
 
     useEffect(() => {
         const getPlanta = async () =>{
             try{
-                const reponse = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaPlanta");
+                const reponse = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaPlanta`);
                 const data = await reponse.json();
                 setPlanta(data);
             }catch(error){
@@ -46,7 +64,7 @@ const RegisterALTemplate = () => {
     useEffect(() => {
         const getCliente = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaCliente");
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaCliente`);
                 const data = await response.json();
                 setCliente(data);
             }catch(error){
@@ -59,7 +77,7 @@ const RegisterALTemplate = () => {
     useEffect(() => {
         const getSolicitante = async () =>{
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaSolicitante");
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaSolicitante`);
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
@@ -72,7 +90,7 @@ const RegisterALTemplate = () => {
     useEffect(() => {
         const getEstatus = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaEstatus");
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaEstatus`);
                 const data = await response.json();
                 setEstatus(data);
             }catch(error){
@@ -85,14 +103,13 @@ const RegisterALTemplate = () => {
     useEffect(() => {     
         const fetchEstatus = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaEstatusProyecto");
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaEstatusProyecto`);
     
                 if(!response.ok){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
                 }
     
                 const data = await response.json();
-                console.log("Respuesta del backend:", data);
                 setEstatusProyecto(data);
             }catch(error){
                 console.log(`Error: ${error}`);
@@ -103,49 +120,92 @@ const RegisterALTemplate = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            const dataToSend = { ...formData };
+            const validateFormData = () => {
+                const requiredFields = [
+                    "codigo",
+                    "plantaId",
+                    "solicitanteId",
+                    "clienteId",
+                    "nDibujo",
+                    "nParte",
+                    "revision",
+                    "fechaDeLaSolicitud",
+                    "estatusId",
+                    "nombreDelProyecto",
+                    "estatusProyectoId",
+                ];
 
-            if (dataToSend.fai === "") {
-                dataToSend.fai = null;
+                for (const field of requiredFields) {
+                    if (!formData[field]) {
+                        throw new Error(`Campo obligatorio faltante: ${field}`);
+                    }
+                };
+
+                if (formData.entregaLaboratorio === null) {
+                    console.warn("El campo 'entregaLaboratorio' está vacío. Se enviará como null.");
+                }
+
+                if (formData.liberacionLaboratorio === null) {
+                    console.warn("El campo 'liberacionLaboratorio' está vacío. Se enviará como null.");
+                }
+                
+                if (!formData.archivoFai) {
+                    console.warn("No se seleccionó ningún archivo. Se enviará como null.");
+                }
+                if (!formData.comentarios) {
+                    console.warn("El campo 'comentarios' está vacío. Se enviará como null.");
+                }
+                if (formData.fai === undefined) {
+                    console.warn("El campo 'fai' no está definido. Se enviará como null.");
+                }
             };
 
-            if (dataToSend.comentarios === "") {
-                dataToSend.comentarios = null;
-            };
+            validateFormData();
 
-            if(dataToSend.entregaLaboratorio === ""){
-                dataToSend.entregaLaboratorio = null;
-            };
+            const formDataToSend = new FormData();
+            formDataToSend.append("codigo", formData.codigo);
+            formDataToSend.append("PlantaId", formData.plantaId);
+            formDataToSend.append("solicitanteId", formData.solicitanteId);
+            formDataToSend.append("clienteId", formData.clienteId);
+            formDataToSend.append("nDibujo", formData.nDibujo);
+            formDataToSend.append("nParte", formData.nParte);
+            formDataToSend.append("revision", formData.revision);
+            formDataToSend.append("EntregaLaboratorio", formData.entregaLaboratorio ?? "");
+            formDataToSend.append("fai", formData.fai ?? "");
+            formDataToSend.append("LiberacionLaboratorio", formData.liberacionLaboratorio ?? "");
+            formDataToSend.append("fechaDeLaSolicitud", formData.fechaDeLaSolicitud);
+            formDataToSend.append("estatusId", formData.estatusId);
+            formDataToSend.append("comentarios", formData.comentarios ?? "");
+            formDataToSend.append("FormFile", formData.archivoFai || null); 
+            formDataToSend.append("nombreDelProyecto", formData.nombreDelProyecto);
+            formDataToSend.append("estatusProyectoId", formData.estatusProyectoId);
 
-            if(dataToSend.liberacionLaboratorio === ""){
-                dataToSend.liberacionLaboratorio = null
-            };
-
-            const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Registrar", {
+            const response = await fetch(`${config.apiUrl}/Impresoras/Registrar`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(dataToSend),
+                body: formDataToSend,
             });
 
             if (!response.ok) {
-                throw new Error(`Error al registrar: ${response.status} ${response.statusText}`);
+                let errorData;
+                try {
+                    errorData = await response.json(); 
+                } catch (jsonError) {                    
+                    errorData = { message: response.statusText };
+                }
+                throw new Error(`Error al registrar: ${response.status} - ${errorData.message}`);
             }
 
-            setOpenSnackbar(true);
+            const data = await response.json();
 
+            setOpenSnackbar(true);
             setTimeout(() => {
                 handleNavigate("/settings/printers/al");
             }, 3000);
-
         } catch (error) {
-            console.log("Error", error);
+            console.error(`Error: ${error.message}`);
         }
     };
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -163,6 +223,18 @@ const RegisterALTemplate = () => {
         });
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData((prevData) => ({
+                ...prevData,
+                archivoFai: file,
+            }));
+            setFileName(file.name);
+        } else {
+            console.warn("No se seleccionó ningún archivo");
+        }
+    };
 
     const handleNavigate = (path) => {
         navigate(path);
@@ -380,6 +452,45 @@ const RegisterALTemplate = () => {
                         value={ formData.comentarios || "" }
                         onChange={ handleChange }
                     />
+
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        color="primary"                        
+                        startIcon={<CloudUploadIcon />}
+                        sx={{
+                            textTransform: "none",
+                            fontWeight: "bold",
+                            px: 4,
+                            py: 1.5,
+                            borderRadius: "8px",
+                            fontSize: { xs: "0.875rem", sm: "1rem" },
+                        }}
+                    >
+                        Subir Archivo
+                        <VisuallyHiddenInput
+                            type="file"
+                            accept=".pdf"
+                            onChange={ handleFileChange }
+                        />
+                    </Button>
+                    {
+                        fileName && (
+                            <Typography
+                                variant="body"
+                                sx={{ 
+                                        mt: 1, 
+                                        ml: 2 , 
+                                        color: "text.secondary", 
+                                        fontStyle: "italic",
+                                        fontSize: { xs: "0.875rem", sm: "1rem" },
+                                    }}
+                            >
+                                Archivo seleccionado: {fileName}
+                            </Typography>
+                        )
+                    }
 
                         <div className="card-actions">
                             <Button
