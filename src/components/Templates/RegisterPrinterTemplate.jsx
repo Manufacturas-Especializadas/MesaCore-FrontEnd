@@ -2,6 +2,7 @@ import { Box, TextField, MenuItem, styled, Button, Paper, Typography, Grid2, Gri
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import config from "../../../config";
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -28,13 +29,13 @@ const RegisterPrinterTemplate = () => {
     const[fileName, setFileName] = useState("");
     const[openSnackbar, setOpenSnackbar] = useState(false);
     const[openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
-    const[sendingSnackbar, setSendingSnackbar] = useState(false);
+    const[sendingSnackbar, setSendingSnackbar] = useState(false);    
     const navigate = useNavigate();
 
     useEffect(() =>{
         const getSolicitante = async () =>{
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaSolicitante");
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaSolicitante`);
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
@@ -79,7 +80,7 @@ const RegisterPrinterTemplate = () => {
             formDataToSend.append("comentarios", formData.comentarios);
             formDataToSend.append("formfile", formData.archivo);
 
-            const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasDashboard/Registro", {
+            const response = await fetch( `${config.apiUrl}/ImpresorasDashboard/Registro`, {
                 method: "POST",
                 body: formDataToSend,
             });

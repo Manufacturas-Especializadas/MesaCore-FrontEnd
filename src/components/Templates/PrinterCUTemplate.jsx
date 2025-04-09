@@ -27,6 +27,7 @@ import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import config from "../../../config";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -113,7 +114,7 @@ const PrinterCUTemplate = () => {
 
     const handleDelete = async () => {
         try{
-            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Eliminar/${selectedPrinterId}`,{
+            const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Eliminar/${selectedPrinterId}`,{
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -141,7 +142,7 @@ const PrinterCUTemplate = () => {
     useEffect(() => {
         const fetchPrinters = async () => {
             try{
-                let url = `https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
+                let url = `${config.apiUrl}/ImpresorasCobre/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
                 if (filters.codigo) {
                     url += `&codigo=${filters.codigo}`;
                 }
@@ -156,7 +157,6 @@ const PrinterCUTemplate = () => {
                 }
 
                 const data = await response.json();
-                console.log(data);
                 setPrinters(data.data);
                 setTotalRecords(data.totalRecords);
 

@@ -2,6 +2,7 @@ import { Alert, Avatar, Box, Button, Container, Grid2, Paper, Snackbar, TextFiel
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import config from "../../../config";
 
 const Register = () => {
     const[formData, setFormData] = useState({
@@ -39,7 +40,7 @@ const Register = () => {
         setSendingSnackbar(true);
 
         try{
-            const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Auth/Registrarse", {
+            const response = await fetch(`${config.apiUrl}/Auth/Registrarse`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
