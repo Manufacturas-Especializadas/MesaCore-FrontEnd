@@ -2,6 +2,7 @@ import { Box, Button, Card, CardContent, Chip, Dialog, DialogContent, Typography
 import { AccessTime as AccessTimeIcon, Person as PersonIcon } from "@mui/icons-material";
 import { useState } from "react";
 import DetailsCardsTemplate from "../Templates/DetailsCardsTemplate";
+import config from "../../../config";
 
 const CardCUTemplate = ({ printer }) => {
     const[selectedPrinterId, setSelectedPrinterId] = useState(null);
@@ -29,7 +30,7 @@ const CardCUTemplate = ({ printer }) => {
 
     const fetchPrintersDetails = async (id) => {
         try {
-            const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerImpresorasCobrePorNombreProyecto/${id}`);
+            const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerImpresorasCobrePorNombreProyecto/${id}`);
             if (!response.ok) {
                 throw new Error(`Error al cargar los datos: ${response.statusText}`);
             }
