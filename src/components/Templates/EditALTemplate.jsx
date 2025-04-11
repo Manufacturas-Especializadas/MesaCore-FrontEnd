@@ -18,6 +18,7 @@ const VisuallyHiddenInput = styled('input')({
 
 const EditALTemplate = () => {
     const[formData, setFormData] = useState({
+        id: "",
         codigo: "",
         plantaId: "",
         solicitanteId: "",
@@ -100,7 +101,6 @@ const EditALTemplate = () => {
                 }
     
                 const data = await response.json();
-                console.log("Respuesta del backend:", data);
                 setEstatusProyecto(data);
             }catch(error){
                 console.log(`Error: ${error}`);
@@ -205,7 +205,7 @@ const EditALTemplate = () => {
             formDataToSend.append("FormFile", formData.archivoFai || null);
             formDataToSend.append("estatusProyectoId", formData.estatusProyectoId);
 
-            const response = await fetch(`${config.apiUrl}/Impresoras/Actualizar`, {
+            const response = await fetch(`${config.apiUrl}/Impresoras/Actualizar/${formData.id}`, {
                 method: 'PUT',
                 body: formDataToSend,
             });
@@ -220,7 +220,7 @@ const EditALTemplate = () => {
                 handleNavigate("/settings/printers/al");
             }, 3000);
         } catch (error) {
-            console.error(`Error: ${error.message}`);
+            console.error("Error: ", error);
         }
     };
 

@@ -18,6 +18,7 @@ const VisuallyHiddenInput = styled('input')({
 
 const EditALTemplate = () => {
     const[formData, setFormData] = useState({
+        id: "",
         codigo: "",
         plantaId: "",
         solicitanteId: "",
@@ -210,7 +211,7 @@ const EditALTemplate = () => {
                 formDataToSend.append("FormFile", "");
             }
 
-            const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Actualizar`, {
+            const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Actualizar/${formData.id}`, {
                 method: 'PUT',
                 body: formDataToSend,
             });
