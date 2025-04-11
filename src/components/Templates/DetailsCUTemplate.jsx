@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText } from "@mui/material";
 import { useEffect, useState } from "react";
+import config from "../../../config";
 
 const DetailsCUTemplate = ({ show, handlClose, printerId }) => {
         const[printer, setPrinter] = useState(null);
@@ -9,7 +10,7 @@ const DetailsCUTemplate = ({ show, handlClose, printerId }) => {
             if(!printerId) return;
 
             try{
-                const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerImpresoraCobrePorId/${printerId}`);
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerImpresoraCobrePorId/${printerId}`);
                 if(!response){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
                 };
