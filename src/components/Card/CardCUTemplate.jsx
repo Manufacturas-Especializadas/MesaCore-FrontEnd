@@ -106,7 +106,11 @@ const CardCUTemplate = ({ printer }) => {
                 <DialogContent>
                     {
                         printersDetails &&(
-                            <DetailsCardsTemplate printer={ printersDetails } onClose={ handleCloseDetails }/>
+                            <DetailsCardsTemplate 
+                                printer={ printersDetails } 
+                                onClose={ handleCloseDetails }
+                                onRefresh={() => fetchPrintersDetails(selectedPrinterId)}
+                            />
                         )
                     }
                 </DialogContent>

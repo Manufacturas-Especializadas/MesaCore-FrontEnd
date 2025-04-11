@@ -110,7 +110,11 @@ const CardALTemplate = ({ printer }) => {
                 <DialogContent>
                     {
                         printersDetails &&(
-                            <DetailsCardALTemplate printer={ printersDetails } onClose={ handleCloseDetails }/>
+                            <DetailsCardALTemplate 
+                                printer={ printersDetails } 
+                                onClose={ handleCloseDetails }
+                                onRefresh={() => fetchPrintersDetails(selectedPrinterId)}
+                            />
                         )
                     }
                 </DialogContent>
