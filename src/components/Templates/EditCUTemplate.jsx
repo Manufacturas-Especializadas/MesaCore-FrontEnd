@@ -1,8 +1,22 @@
 import { useState, useEffect } from "react";
-import { MenuItem, TextField, Button, Snackbar, Alert } from "@mui/material";
+import { MenuItem, TextField, Button, Snackbar, Alert, styled, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import config from "../../../config";
 
-const EditCUTemplate = () => {
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
+
+const EditALTemplate = () => {
     const[formData, setFormData] = useState({
         codigo: "",
         plantaId: "",
@@ -11,21 +25,24 @@ const EditCUTemplate = () => {
         nDibujo: "",
         nParte: "",
         revision: "",
-        entregaLaboratorio: "",
-        fai: "",
-        liberacionLaboratorio: "",
+        entregaLaboratorio: null,
+        fai: null,
+        liberacionLaboratorio: null,
         fechaDeLaSolicitud: "",
+        nombreDelProyecto: "",
         estatusId: "",
-        comentarios: "",
+        comentarios: null,
+        archivoFai: null,
         estatusProyectoId: "",
     });
 
     const[planta, setPlanta] = useState([]);
     const[cliente, setCliente] = useState([]);
-    const[solicitante, setSolicitante] = useState([]);
     const[estatusProyecto, setEstatusProyecto] = useState([]);
+    const[solicitante, setSolicitante] = useState([]);
     const[estatus, setEstatus] = useState([]);
     const[openSnackbar, setOpenSnackbar] = useState(false);
+    const[fileName, setFileName] = useState("");
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -37,7 +54,7 @@ const EditCUTemplate = () => {
 
         const getPrinterById = async () => {
             try {
-                const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerImpresoraCobrePorId/${id}`);
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerImpresoraCobrePorId/${id}`);
                 
                 if (!response.ok) {
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -62,7 +79,7 @@ const EditCUTemplate = () => {
     useEffect(() => {
         const getPlanta = async () =>{
             try{
-                const reponse = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaPlanta");
+                const reponse = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaPlanta`);
                 const data = await reponse.json();
                 setPlanta(data);
             }catch(error){
@@ -73,17 +90,16 @@ const EditCUTemplate = () => {
         getPlanta();
     }, []);
 
-    useEffect(() => {     
+    useEffect(() => {
         const fetchEstatus = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaEstatusProyecto");
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaEstatusProyecto`);
     
                 if(!response.ok){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
                 }
     
                 const data = await response.json();
-                console.log("Respuesta del backend:", data);
                 setEstatusProyecto(data);
             }catch(error){
                 console.log(`Error: ${error}`);
@@ -95,7 +111,7 @@ const EditCUTemplate = () => {
     useEffect(() => {
         const getCliente = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaCliente");
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaCliente`);
                 const data = await response.json();
                 setCliente(data);
             }catch(error){
@@ -108,7 +124,7 @@ const EditCUTemplate = () => {
     useEffect(() => {
         const getSolicitante = async () =>{
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaSolicitante");
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaSolicitante`);
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
@@ -121,7 +137,7 @@ const EditCUTemplate = () => {
     useEffect(() => {
         const getEstatus = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/ObtenerListaEstatus");
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaEstatus`);
                 const data = await response.json();
                 setEstatus(data);
             }catch(error){
@@ -139,58 +155,79 @@ const EditCUTemplate = () => {
         const { name, value } = e.target;
 
         setFormData((prevData) => {
-            if (name === "fai") {
+            let updateValue = value
 
-                if (value === "" || parseFloat(value) >= 0) {
-                    return { ...prevData, [name]: value };
-                }
-                return prevData;
+            if(name === "fai" && value === ""){
+                updateValue = null;
             }
 
-            return { ...prevData, [name]: value };
+            if(name === "comentarios" && value === ""){
+                updateValue = null;
+            }
+
+            return { ...prevData, [name]: updateValue }
         });
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData((prevData) => ({
+                ...prevData,
+                archivoFai: file,
+            }));
+            setFileName(file.name);
+        } else {
+            console.warn("No se seleccionó ningún archivo");
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const dataToSend = { ...formData };
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append("codigo", formData.codigo);
+            formDataToSend.append("plantaId", formData.plantaId);
+            formDataToSend.append("solicitanteId", formData.solicitanteId);
+            formDataToSend.append("clienteId", formData.clienteId);
+            formDataToSend.append("nDibujo", formData.nDibujo);
+            formDataToSend.append("nParte", formData.nParte);
+            formDataToSend.append("revision", formData.revision);
+            formDataToSend.append("entregaLaboratorio", formData.entregaLaboratorio ?? "");
+            formDataToSend.append("fai", formData.fai ?? "");
+            formDataToSend.append("liberacionLaboratorio", formData.liberacionLaboratorio ?? "");
+            formDataToSend.append("fechaDeLaSolicitud", formData.fechaDeLaSolicitud);
+            formDataToSend.append("nombreDelProyecto", formData.nombreDelProyecto);
+            formDataToSend.append("estatusId", formData.estatusId);
+            formDataToSend.append("comentarios", formData.comentarios ?? "");
+            formDataToSend.append("FormFile", formData.archivoFai || null);
+            formDataToSend.append("estatusProyectoId", formData.estatusProyectoId);
 
-        if (dataToSend.fai === "") {
-            dataToSend.fai = null;
-        }
+            if(formData.archivoFai){
+                formDataToSend.append("FormFile", formData.archivoFai);
+            } else{
+                formDataToSend.append("FormFile", "");
+            }
 
-        if (dataToSend.comentarios === "") {
-            dataToSend.comentarios = null;
-        }
+            const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Actualizar`, {
+                method: 'PUT',
+                body: formDataToSend,
+            });
 
-        if(dataToSend.entregaLaboratorio === ""){
-            dataToSend.entregaLaboratorio = null
-        };
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Error al actualizar: ${response.status} - ${errorData.message}`);
+            }
 
-        if(dataToSend.liberacionLaboratorio === ""){
-            dataToSend.liberacionLaboratorio = null
-        };
-
-        const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/ImpresorasCobre/Actualizar", {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dataToSend)            
-        });
-
-        setOpenSnackbar(true);
-
-        setTimeout(() => {
-            handleNavigate("/settings/printers/cu");
-        }, 3000);
-
-        if(!response.ok){
-            throw new Error(`Error al registrar: ${response.status}${response.statusText}`);
+            setOpenSnackbar(true);
+            setTimeout(() => {
+                handleNavigate("/settings/printers/cu");
+            }, 3000);
+        } catch (error) {
+            console.error(`Error: ${error.message}`);
         }
     };
-
 
     return (
         <>
@@ -211,9 +248,9 @@ const EditCUTemplate = () => {
                         />
 
                         <TextField
-                            required
                             fullWidth
-                            select                            
+                            select
+                            required
                             variant="outlined"
                             label="Estatus del proyecto"
                             name="estatusProyectoId"
@@ -260,8 +297,8 @@ const EditCUTemplate = () => {
 
                         <TextField
                             select
-                            required
                             fullWidth
+                            required
                             variant="outlined"
                             label="Solicitante"
                             name="solicitanteId"
@@ -280,8 +317,8 @@ const EditCUTemplate = () => {
 
                         <TextField
                             select
-                            required
                             fullWidth
+                            required
                             variant="outlined"
                             label="Planta"
                             name="plantaId"
@@ -300,8 +337,8 @@ const EditCUTemplate = () => {
 
                         <TextField
                             select
-                            required
                             fullWidth
+                            required
                             variant="outlined"
                             label="Cliente"
                             name="clienteId"
@@ -348,21 +385,21 @@ const EditCUTemplate = () => {
                         />
                     
                         <TextField
-                            fullWidth
                             type="date"
+                            fullWidth
                             variant="outlined"
-                            name="entregaLaboratorio"
                             helperText="Entrega laboratorio"
+                            name="entregaLaboratorio"
                             value={ formData.entregaLaboratorio || ""}
                             onChange={ handleChange }
                         />
 
                         <TextField
-                            fullWidth
                             type="date"
+                            fullWidth
                             variant="outlined"
-                            name="liberacionLaboratorio"
                             helperText="Liberación laboratorio"
+                            name="liberacionLaboratorio"
                             value={ formData.liberacionLaboratorio || "" }
                             onChange={ handleChange }
                         />
@@ -408,6 +445,45 @@ const EditCUTemplate = () => {
                             onChange={ handleChange }
                         />
 
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="contained"
+                            color="primary"                        
+                            startIcon={<CloudUploadIcon />}
+                            sx={{
+                                textTransform: "none",
+                                fontWeight: "bold",
+                                px: 4,
+                                py: 1.5,
+                                borderRadius: "8px",
+                                fontSize: { xs: "0.875rem", sm: "1rem" },
+                            }}
+                        >
+                            Subir Archivo
+                            <VisuallyHiddenInput
+                                type="file"
+                                accept=".pdf"
+                                onChange={ handleFileChange }
+                            />
+                        </Button>
+                        {
+                            fileName && (
+                                <Typography
+                                    variant="body"
+                                    sx={{ 
+                                            mt: 1, 
+                                            ml: 2 , 
+                                            color: "text.secondary", 
+                                            fontStyle: "italic",
+                                            fontSize: { xs: "0.875rem", sm: "1rem" },
+                                        }}
+                                >
+                                    Archivo seleccionado: {fileName}
+                                </Typography>
+                            )
+                        }
+
                         <div className="card-actions">
                             <Button
                                 color="error"
@@ -444,4 +520,4 @@ const EditCUTemplate = () => {
     )
 }
 
-export default EditCUTemplate
+export default EditALTemplate

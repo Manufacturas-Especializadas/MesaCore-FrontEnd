@@ -1,7 +1,20 @@
 import { useState, useEffect } from "react";
-import { MenuItem, TextField, Button, Snackbar, Alert } from "@mui/material";
+import { MenuItem, TextField, Button, Snackbar, Alert, styled, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import config from "../../../config";
 
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
 
 const EditALTemplate = () => {
     const[formData, setFormData] = useState({
@@ -12,13 +25,14 @@ const EditALTemplate = () => {
         nDibujo: "",
         nParte: "",
         revision: "",
-        entregaLaboratorio: "",
-        fai: "",
-        liberacionLaboratorio: "",
+        entregaLaboratorio: null,
+        fai: null,
+        liberacionLaboratorio: null,
         fechaDeLaSolicitud: "",
         nombreDelProyecto: "",
         estatusId: "",
-        comentarios: "",
+        comentarios: null,
+        archivoFai: null,
         estatusProyectoId: "",
     });
 
@@ -28,6 +42,7 @@ const EditALTemplate = () => {
     const[solicitante, setSolicitante] = useState([]);
     const[estatus, setEstatus] = useState([]);
     const[openSnackbar, setOpenSnackbar] = useState(false);
+    const[fileName, setFileName] = useState("");
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -39,7 +54,7 @@ const EditALTemplate = () => {
 
         const getPrinterById = async () => {
             try {
-                const response = await fetch(`https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerImpresoraPorId/${id}`);
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerImpresoraPorId/${id}`);
                 
                 if (!response.ok) {
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -64,7 +79,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getPlanta = async () =>{
             try{
-                const reponse = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaPlanta");
+                const reponse = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaPlanta`);
                 const data = await reponse.json();
                 setPlanta(data);
             }catch(error){
@@ -78,7 +93,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const fetchEstatus = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaEstatusProyecto");
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaEstatusProyecto`);
     
                 if(!response.ok){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
@@ -97,7 +112,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getCliente = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaCliente");
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaCliente`);
                 const data = await response.json();
                 setCliente(data);
             }catch(error){
@@ -110,7 +125,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getSolicitante = async () =>{
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaSolicitante");
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaSolicitante`);
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
@@ -123,7 +138,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getEstatus = async () => {
             try{
-                const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/ObtenerListaEstatus");
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaEstatus`);
                 const data = await response.json();
                 setEstatus(data);
             }catch(error){
@@ -141,55 +156,71 @@ const EditALTemplate = () => {
         const { name, value } = e.target;
 
         setFormData((prevData) => {
-            if (name === "fai") {
+            let updateValue = value
 
-                if (value === "" || parseFloat(value) >= 0) {
-                    return { ...prevData, [name]: value };
-                }
-                return prevData;
+            if(name === "fai" && value === ""){
+                updateValue = null;
             }
 
-            return { ...prevData, [name]: value };
+            if(name === "comentarios" && value === ""){
+                updateValue = null;
+            }
+
+            return { ...prevData, [name]: updateValue }
         });
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData((prevData) => ({
+                ...prevData,
+                archivoFai: file,
+            }));
+            setFileName(file.name);
+        } else {
+            console.warn("No se seleccionó ningún archivo");
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const dataToSend = { ...formData };
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append("codigo", formData.codigo);
+            formDataToSend.append("plantaId", formData.plantaId);
+            formDataToSend.append("solicitanteId", formData.solicitanteId);
+            formDataToSend.append("clienteId", formData.clienteId);
+            formDataToSend.append("nDibujo", formData.nDibujo);
+            formDataToSend.append("nParte", formData.nParte);
+            formDataToSend.append("revision", formData.revision);
+            formDataToSend.append("entregaLaboratorio", formData.entregaLaboratorio ?? "");
+            formDataToSend.append("fai", formData.fai ?? "");
+            formDataToSend.append("liberacionLaboratorio", formData.liberacionLaboratorio ?? "");
+            formDataToSend.append("fechaDeLaSolicitud", formData.fechaDeLaSolicitud);
+            formDataToSend.append("nombreDelProyecto", formData.nombreDelProyecto);
+            formDataToSend.append("estatusId", formData.estatusId);
+            formDataToSend.append("comentarios", formData.comentarios ?? "");
+            formDataToSend.append("FormFile", formData.archivoFai || null);
+            formDataToSend.append("estatusProyectoId", formData.estatusProyectoId);
 
-        if (dataToSend.fai === "") {
-            dataToSend.fai = null;
-        }
+            const response = await fetch(`${config.apiUrl}/Impresoras/Actualizar`, {
+                method: 'PUT',
+                body: formDataToSend,
+            });
 
-        if (dataToSend.comentarios === "") {
-            dataToSend.comentarios = null;
-        }
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Error al actualizar: ${response.status} - ${errorData.message}`);
+            }
 
-        if(dataToSend.entregaLaboratorio === ""){
-            dataToSend.entregaLaboratorio === null
-        };
-
-        if(dataToSend.liberacionLaboratorio === ""){
-            dataToSend.liberacionLaboratorio === null
-        };
-
-        const response = await fetch("https://app-mesa-mesacore-api-prod.azurewebsites.net/api/Impresoras/Actualizar", {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dataToSend)            
-        });
-
-        setOpenSnackbar(true);
-
-        setTimeout(() => {
-            handleNavigate("/settings/printers/al");
-        }, 3000);
-
-        if(!response.ok){
-            throw new Error(`Error al registrar: ${response.status}${response.statusText}`);
+            setOpenSnackbar(true);
+            setTimeout(() => {
+                handleNavigate("/settings/printers/al");
+            }, 3000);
+        } catch (error) {
+            console.error(`Error: ${error.message}`);
         }
     };
 
@@ -408,6 +439,45 @@ const EditALTemplate = () => {
                             value={ formData.comentarios || "" }
                             onChange={ handleChange }
                         />
+
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="contained"
+                            color="primary"                        
+                            startIcon={<CloudUploadIcon />}
+                            sx={{
+                                textTransform: "none",
+                                fontWeight: "bold",
+                                px: 4,
+                                py: 1.5,
+                                borderRadius: "8px",
+                                fontSize: { xs: "0.875rem", sm: "1rem" },
+                            }}
+                        >
+                            Subir Archivo
+                            <VisuallyHiddenInput
+                                type="file"
+                                accept=".pdf"
+                                onChange={ handleFileChange }
+                            />
+                        </Button>
+                        {
+                            fileName && (
+                                <Typography
+                                    variant="body"
+                                    sx={{ 
+                                            mt: 1, 
+                                            ml: 2 , 
+                                            color: "text.secondary", 
+                                            fontStyle: "italic",
+                                            fontSize: { xs: "0.875rem", sm: "1rem" },
+                                        }}
+                                >
+                                    Archivo seleccionado: {fileName}
+                                </Typography>
+                            )
+                        }
 
                         <div className="card-actions">
                             <Button
