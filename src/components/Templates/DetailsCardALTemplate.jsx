@@ -1,6 +1,6 @@
-import { Chip ,Divider, IconButton, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
+import { Button, Chip ,Divider, IconButton, List, ListItem, ListItemText, Paper, Typography, Link } from "@mui/material";
 
-const DetailsCardALTemplate = ({ printer, onClose }) => {
+const DetailsCardALTemplate = ({ printer, onClose, onRefresh }) => {
 
     const statusColor = {
         Aprobada: "#4caf50",
@@ -14,6 +14,24 @@ const DetailsCardALTemplate = ({ printer, onClose }) => {
     const getStatusColor = (status) =>{
         return statusColor[status] || "#000";
     };
+
+    const handleDownload = async (fileUrl) => {
+        try{
+            const link = document.createElement("a");
+
+            link.href = fileUrl;
+            link.setAttribute("download", fileUrl.split("/").pop());
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            if(typeof onRefresh === "function"){
+                await onRefresh();
+            }
+        }catch(error){
+            console.error(`Error al descargar el archivo: ${error}`);
+        };
+    }
 
     return (
         <>
@@ -72,20 +90,24 @@ const DetailsCardALTemplate = ({ printer, onClose }) => {
                     {printer.impresiones.map((impresion, index) => (
                         <ListItem key={index} sx={{ borderBottom: "1px solid #eee" }}>
                             <ListItemText
-                                    primary={`N. Parte: ${impresion.nParte}`}
+                                    primary={
+                                        <Typography sx={{ mb: 1 }}>
+                                            <strong> N. Parte: </strong> {impresion.nParte}
+                                        </Typography>
+                                    }
                                     secondary={
                                         <Typography component="div" variant="body2">
                                             <Typography variant="caption" sx={{ m: 1 }}>
-                                                N.Dibujo:  { impresion.nDibujo }
+                                                <strong> N.Dibujo: </strong> { impresion.nDibujo }
                                             </Typography>
                                             <Typography variant="caption" sx={{ m: 1 }}>
-                                                Revisión: { impresion.revision }
+                                                <strong> Revisión: </strong>  { impresion.revision }
                                             </Typography>
                                             <Typography variant="caption" sx={{ m: 1 }}>
-                                                Cliente: { impresion.cliente?.nombre }
+                                                <strong> Cliente: </strong> { impresion.cliente?.nombre }
                                             </Typography>
                                             <Typography variant="caption" sx={{ m:1 }}>
-                                                Planta: { impresion.planta?.nombre }
+                                                <strong> Planta: </strong> { impresion.planta?.nombre }
                                             </Typography>
                                             <Chip
                                                 label={impresion.estatus?.nombre || "Desconocido"}
@@ -97,9 +119,24 @@ const DetailsCardALTemplate = ({ printer, onClose }) => {
                                                     marginLeft: 3,
                                                 }}
                                             />
+
+                                            {
+                                                impresion.archivoFai && (
+                                                    <Typography>
+                                                        <Button
+                                                            variant="text"
+                                                            size="small"
+                                                            sx={{ color: "#e91111" }}
+                                                            onClick={() => handleDownload(impresion.archivoFai)}
+                                                        >
+                                                            Descargar FAI
+                                                        </Button>
+                                                    </Typography>
+                                                )
+                                            }
                                         </Typography>
                                     }
-                            />
+                            />                                                    
                         </ListItem>
                     ))}
                 </List>
