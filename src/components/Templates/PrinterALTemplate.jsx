@@ -115,7 +115,7 @@ const PrinterALTemplate = () => {
 
     const handleDelete = async () => {
         try{
-            const response = await fetch(`${config.apiUrl}/Impresoras/Eliminar/${selectedPrinterId}`,{
+            const response = await fetch(`${config.apiUrl}/PrintersAl/Eliminar/${selectedPrinterId}`,{
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -145,7 +145,7 @@ const PrinterALTemplate = () => {
             try{
                 setLoading(true);
 
-                let url = `${config.apiUrl}/Impresoras/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
+                let url = `${config.apiUrl}/PrintersAl/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
                 if (filters.codigo) {
                     url += `&codigo=${filters.codigo}`;
                 }
