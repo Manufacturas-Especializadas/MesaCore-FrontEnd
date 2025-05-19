@@ -145,7 +145,7 @@ const PrinterALTemplate = () => {
             try{
                 setLoading(true);
 
-                let url = `${config.apiUrl}/PrintersAl/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
+                let url = `${config.apiUrl}/Impresoras/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
                 if (filters.codigo) {
                     url += `&codigo=${filters.codigo}`;
                 }
