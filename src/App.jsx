@@ -35,7 +35,7 @@ function App() {
         {/* <Navbar2 toggleSidebar={toggleSidebar} isMobileOpen={isMobileOpen} />
         <Sidebar2 isMobileOpen={ isMobileOpen } toggleSidebar={ toggleSidebar }/> */}
         
-        <Box sx={{marginTop: 10, marginLeft: 10,}}>
+        <Box sx={{marginTop: 2, marginLeft: 2,}}>
           <MyRoutes/>
         </Box>
       </BrowserRouter>
