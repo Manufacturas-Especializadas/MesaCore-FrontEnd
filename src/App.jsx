@@ -1,42 +1,59 @@
 import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, Toolbar, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "./components/Navbar/Navbar";
-import Sidebar from "./components/Sidebar/Sidebar";
-
-
 import MyRoutes from "./Routes/Routes";
-import Navbar2 from "./components/Navbar/Navbar2";
-import Sidebar2 from "./components/Sidebar/Sidebar2";
+import Sidebar3 from "./components/Sidebar/Sidebar3";
 
 function App() {
-  const [open, setOpen] = useState(false);
+  const[open, setOpen] = useState(false);
+  const[mobileOpen, setMobileOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleDrawerOpen = () =>{
-    setOpen(true);
+  const handleDrawerToggle = () =>{
+    if (isMobile) {
+      setMobileOpen(!mobileOpen);
+    } else {
+      setOpen(!open);
+    }
   };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  // const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  // const toggleSidebar = () => {
-  //   setIsMobileOpen(!isMobileOpen);
-  // };
 
   return (
     <>
       <BrowserRouter>
-        <Navbar handleDrawerOpen={ handleDrawerOpen }/>
-        <Sidebar open={ open } handleDrawerClose={ handleDrawerClose }/>
+        <Box sx={{ display: "flex", flexDirection: "column", height: "100vh", width: "100%" }}>
+          <Navbar handleDrawerOpen={handleDrawerToggle} />
 
-        {/* <Navbar2 toggleSidebar={toggleSidebar} isMobileOpen={isMobileOpen} />
-        <Sidebar2 isMobileOpen={ isMobileOpen } toggleSidebar={ toggleSidebar }/> */}
-        
-        <Box sx={{marginTop: 2, marginLeft: 2,}}>
-          <MyRoutes/>
+          <Box sx={{ display: "flex", flexGrow: 1, width: "100%", overflow: "hidden" }}>
+            <Sidebar3 
+              open={isMobile ? mobileOpen : open}
+              onClose={() => {
+                if (isMobile) setMobileOpen(false);
+                else setOpen(false);
+              }}
+              mobileOpen={mobileOpen}
+              handleDrawerToggle={handleDrawerToggle}
+            />
+
+            {/* Contenido principal */}
+            <Box
+              component="main"
+              sx={{
+                marginTop: 1,
+                flexGrow: 1,
+                p: 3,
+                overflowY: "auto",
+                width: {
+                  xs: "100%",
+                  sm: `calc(100% - ${isMobile ? 0 : open ? 240 : 60}px)`,
+                },
+                transition: "width 0.3s ease",
+              }}
+            >
+              <MyRoutes />
+            </Box>
+          </Box>
         </Box>
       </BrowserRouter>
     </>
