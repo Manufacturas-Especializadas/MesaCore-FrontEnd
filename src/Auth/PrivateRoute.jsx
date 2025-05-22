@@ -1,34 +1,66 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useState } from "react";
+import { Alert, Snackbar } from "@mui/material";
 
-const PrivateRoute = ({ children, requireRole }) => {
+const PrivateRoute = ({ allowedRoles }) => {
     const token = localStorage.getItem("token");
+    const[openSnackbar, setOpenSnackbar] = useState(false);
+    const[snackbarMessage, setSnackMessage] = useState("");
+
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false);
+    };
 
     if(!token){
-        return <Navigate to="/"/>
+        return <Navigate to="/login"/>
     }
 
     try{
         const decoded = jwtDecode(token);
+        const currentTime = Math.floor(Date.now() / 1000);
+
+        if(decoded.exp < currentTime){
+            localStorage.removeItem("token");
+            return <Navigate to="/login"/>
+        }
+
         const userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-        const allowedRoles = Array.isArray(requireRole) ? requireRole : [requireRole];
+        const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
 
-        if (!allowedRoles || allowedRoles.length === 0) {
-            return children;
+        if(roles.length && !roles.includes(userRole)){
+            setSnackMessage("No tienes permisos para acceder a esta ruta");
+            setOpenSnackbar(true);
+
+            return <Navigate to="/"/>
         }
 
-        if (!allowedRoles.includes(userRole)) {
-            return <Navigate to="/home" />;
-        }
-
-        return children;
+        return(
+            <>
+                <Outlet/>
+                <Snackbar
+                    open={ openSnackbar }
+                    autoHideDuration={ 3000 }
+                    onClose={ handleCloseSnackbar }
+                >
+                    <Alert
+                        severity="warning"
+                        sx={{
+                            width: '100%'
+                        }}
+                        onClose={ handleCloseSnackbar }
+                    >
+                        { snackbarMessage }
+                    </Alert>
+                </Snackbar>
+            </>
+        )
     }catch(error){
-        console.log(`Token invalido: ${error}`);
-        return <Navigate to="/"/>
+        localStorage.removeItem("token");
+        
+        return <Navigate to="/login"/>
     }
-
-    return children;
 }
 
 export default PrivateRoute

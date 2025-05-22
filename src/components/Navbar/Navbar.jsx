@@ -11,11 +11,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = ({ handleDrawerOpen }) => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [userEmail, setUserEmail] = useState("");
-    const [userRole, setUserRole] = useState("");
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
 
     const handleNavigate = (path) => {
@@ -31,22 +31,9 @@ const Navbar = ({ handleDrawerOpen }) => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        handleNavigate("/");
-    }
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if(token){
-            try{
-                const decoded = jwtDecode(token);
-                setUserEmail(decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] || "");
-                setUserRole(decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || "")
-            }catch(error){
-                console.error(`Token invalido: ${error}`);
-            }
-        }
-    }, []);
+        logout();
+        handleNavigate("/login");
+    };
     
     return (
         <>
@@ -94,10 +81,12 @@ const Navbar = ({ handleDrawerOpen }) => {
                                 onClose={ handleClose }
                             >
                                 <MenuItem disabled>
-                                    { userEmail }
+                                    { user?.email }
                                 </MenuItem>
                                 <MenuItem disabled>
-                                    <strong style={{ marginLeft: '5px' }}> { userRole } </strong>
+                                    <strong style={{ marginLeft: '5px' }}> 
+                                        { user?.role } 
+                                    </strong>
                                 </MenuItem>
                                 <MenuItem onClick={ handleLogout }> Cerrar sesión </MenuItem>
                             </Menu>

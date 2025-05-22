@@ -28,7 +28,7 @@ const Sidebar = ({open, handleDrawerClose}) => {
 
                 <List>
                     {
-                        siderbarData.map((item, index) => (
+                        sidebarItems.map((item, index) => (
                             <ListItem key={ item.name }  component={ Link } to={ item.path }>
                                 <ListItemIcon>
                                     { item.icon }

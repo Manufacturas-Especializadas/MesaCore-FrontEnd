@@ -1,7 +1,7 @@
-import { Divider, Drawer, IconButton, List, styled, useMediaQuery, useTheme } from "@mui/material";
-import { ChevronLeft } from "@mui/icons-material";
+import { Divider, Drawer, List, styled, useMediaQuery, useTheme } from "@mui/material";
 import { siderbarData } from "../../data/siderBarData";
 import ListItemLink from "./ListItemLink";
+import { useAuth } from "../../context/AuthContext";
 
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -11,14 +11,20 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar
 }));
 
-const Sidebar3 = ({ open, onClose, mobileOpen, handleDrawerToggle }) => {
+const Sidebar3 = ({ open, mobileOpen, handleDrawerToggle }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const { isAuthenticated, user } = useAuth();
+    const role = user?.role || "";
+
+    const items = siderbarData({ isAuthenticated, role });
 
     const drawerWidth = {
         sm: 60,
         md: 240
     };
+
+    if (!isAuthenticated) return null;
 
     return (
         <>
@@ -57,7 +63,7 @@ const Sidebar3 = ({ open, onClose, mobileOpen, handleDrawerToggle }) => {
 
                 <List>
                     {
-                        siderbarData.map((item, index) => (
+                        items.map((item, index) => (
                             <ListItemLink
                                 key={ index }
                                 to={ item.path }

@@ -1,8 +1,10 @@
 import { Alert, Avatar, Box, Button, Container, Grid2, Paper, Snackbar, TextField, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { data, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import config from "../../../config";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
     const[email, setEmail] = useState("");
@@ -11,7 +13,15 @@ const Login = () => {
     const[snackbarMessage, setSnackbarMessage] = useState("");
     const[snackbarSeverity, setSnackbarSeverity] = useState("info");
     const[sendingSnackbar, setSendingSnackbar] = useState(false);
+    const{ login } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if(token){
+            navigate("/", { replace: true });
+        }
+    }, [navigate]);
 
     const handleNavigate = (path) =>{
         navigate(path);
@@ -21,9 +31,8 @@ const Login = () => {
         setOpenSnackbar(false);
     }
 
-    const handleSubmit = async (e) =>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
         setSendingSnackbar(true);
 
         const loginData = {
@@ -31,7 +40,7 @@ const Login = () => {
             clave: password
         };
 
-        try{
+        try {
             const response = await fetch(`${config.apiUrl}/Auth/Login`, {
                 method: "POST",
                 headers: {
@@ -42,30 +51,32 @@ const Login = () => {
 
             const data = await response.json();
 
-            if(data.isSuccess){
+            if (data.isSuccess && data.token) {
                 localStorage.setItem("token", data.token);
+                login(data.token);
+
                 setSnackbarMessage("Inicio de sesión exitoso");
                 setSnackbarSeverity("success");
                 setOpenSnackbar(true);
-
+                
                 setTimeout(() => {
-                    handleNavigate("/home");
-                }, 3000);
-
-            }else{
+                    navigate("/", { replace: true });
+                }, 1000);
+            } else {
                 setSnackbarMessage("Credenciales incorrectas. Intenta de nuevo");
                 setSnackbarSeverity("error");
                 setOpenSnackbar(true);
             }
-        }catch(error){
+        } catch (error) {
+            console.error("Error en el login:", error);
             setSnackbarMessage("Error al conectar con el servidor");
             setSnackbarSeverity("error");
             setOpenSnackbar(true);
-            console.log(`Error: ${error}`);
-        }finally{
+        } finally {
             setSendingSnackbar(false);
-        }        
+        }
     };
+    
 
     return (
         <>
