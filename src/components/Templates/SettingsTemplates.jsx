@@ -1,14 +1,20 @@
 import { Card, CardActionArea, CardContent, Icon, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { carData } from "../../data/cardData";
+import { useAuth } from "../../context/AuthContext";
 
 const SettingsTemplates = () => {
+    const { user } = useAuth();
+    const role = user?.role || "";
+
+    const items = carData({ role });
+
     return (
         <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 
                     gap-2 justify-center items-center min-h-screen">                
                 {
-                    carData.map((item) => (
+                    items.map((item) => (
                         <Link key={ item.title } to={ item.path } className="underline-none">
                             <Card sx={{
                                     maxWidth: 345,
