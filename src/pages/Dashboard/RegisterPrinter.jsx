@@ -1,4 +1,4 @@
-import RegisterPrinterTemplate from "../../components/Templates/RegisterPrinterTemplate";
+import RegisterPrinterTemplate from "../../components/Templates/Dashboard/RegisterPrinterTemplate";
 
 const RegisterPrinter = () => {
     return (

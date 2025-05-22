@@ -1,5 +1,4 @@
-import { 
-    Button, 
+import {  
     Paper, 
     styled, 
     Table, 
@@ -17,18 +16,18 @@ import {
     TextField,
     IconButton,
     Box,
-    Grid
-} from "@mui/material"
+    Grid,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DetailsALTemplate from "./DetailsALTemplate";
-import DeleteALTemplate from "./DeleteALTemplate";
+import DeleteCUTemplate from "./DeleteCUTemplate";
+import DetailsCUTemplate from "./DetailsCUTemplate";
 import EditIcon from '@mui/icons-material/Edit';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import config from "../../../config";
+import config from "../../../../../config";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -49,7 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     }
 }));
 
-const PrinterALTemplate = () => {
+const PrinterCUTemplate = () => {
     const[printers, setPrinters] = useState([]);
     const[showModal, setShowModal] = useState(false);
     const[selectedPrinterId, setSelectedPrinterId] = useState(null);
@@ -65,7 +64,7 @@ const PrinterALTemplate = () => {
         nParte: "",        
     });
     const navigate = useNavigate();
-
+    
     const statusColor = {
         Aprobada: "#4caf50",
         Rechazada: "#f44336",
@@ -115,7 +114,7 @@ const PrinterALTemplate = () => {
 
     const handleDelete = async () => {
         try{
-            const response = await fetch(`${config.apiUrl}/PrintersAl/Eliminar/${selectedPrinterId}`,{
+            const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Eliminar/${selectedPrinterId}`,{
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -143,13 +142,11 @@ const PrinterALTemplate = () => {
     useEffect(() => {
         const fetchPrinters = async () => {
             try{
-                setLoading(true);
-
-                let url = `${config.apiUrl}/Impresoras/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
+                let url = `${config.apiUrl}/ImpresorasCobre/Paginacion?page=${page + 1}&pageSize=${rowsPerPage}`;
                 if (filters.codigo) {
                     url += `&codigo=${filters.codigo}`;
                 }
-                
+
                 if (filters.nParte) {
                     url += `&nParte=${filters.nParte}`;
                 }
@@ -158,6 +155,7 @@ const PrinterALTemplate = () => {
                 if (!response.ok) {
                     throw new Error("Error en el fetching");
                 }
+
                 const data = await response.json();
                 setPrinters(data.data);
                 setTotalRecords(data.totalRecords);
@@ -177,7 +175,7 @@ const PrinterALTemplate = () => {
         }
         fetchPrinters();
     }, [page, rowsPerPage, filters]);
-    
+
     return (
         <>
             <TableContainer component={ Paper } sx={{ padding: 5 }}>
@@ -189,7 +187,7 @@ const PrinterALTemplate = () => {
                         <ArrowBackIcon/>
                     </IconButton>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', mb:{ xs:2, sm: 0 }, mr: 3 }}>
-                        REGISTRO - FIXTURES - AL
+                        REGISTRO - FIXTURES - CU
                     </Typography>
                     
                     <Grid container spacing={2} >
@@ -221,9 +219,9 @@ const PrinterALTemplate = () => {
                     </Grid>
 
                     <IconButton
-                        sx={{color: "black", ml: 3 }}
+                        sx={{color: "black", ml: 3}}
                         size="large"
-                        onClick={() => handleNavigate("/settings/printers/al/register")}
+                        onClick={() => handleNavigate("/settings/printers/cu/register")}
                     >
                         <AddCircleOutlineRoundedIcon/>
                     </IconButton>
@@ -262,7 +260,7 @@ const PrinterALTemplate = () => {
                                 </StyledTableCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody className="uppercase">
+                        <TableBody className="uppercase">                        
                             {loading ? (
                                     <TableRow>
                                         <TableCell colSpan={ 9 } align="center">
@@ -298,10 +296,10 @@ const PrinterALTemplate = () => {
                                             <StyledTableCell sx={{ display: { xs: 'none', lg: 'table-cell' } }}>
                                                 {item.revision}
                                             </StyledTableCell>
-                                            <StyledTableCell sx={{ display: 'flex', gap: 2, alignContent: 'center' }}>
+                                            <StyledTableCell sx={{ display: 'flex', gap: 2 , textAlign: 'center'}}>
                                                 <IconButton
                                                     sx={{color: "black" }}
-                                                    onClick={() => handleNavigate(`/settings/printers/al/edit/${item.id}`)}
+                                                    onClick={() => handleNavigate(`/settings/printers/cu/edit/${item.id}`)}
                                                 >
                                                     <EditIcon/>
                                                 </IconButton>
@@ -314,11 +312,12 @@ const PrinterALTemplate = () => {
                                                 </IconButton>
 
                                                 <IconButton
-                                                    sx={{color: "black" }}
+                                                    sx={{color: "black"}}
                                                     onClick={() => handleOpenDialog(item.id)}
                                                 >
                                                     <DeleteIcon/>
                                                 </IconButton>
+
                                             </StyledTableCell>
                                         </StyledTableRow>
                                     ))
@@ -340,13 +339,13 @@ const PrinterALTemplate = () => {
                 />
             </TableContainer>
 
-            <DetailsALTemplate
+            <DetailsCUTemplate
                 show={ showModal }
                 handlClose={ handleCloseModal }
                 printerId={ selectedPrinterId }
-            /> 
+            />
 
-            <DeleteALTemplate
+            <DeleteCUTemplate
                 open={ openDialog }
                 onClose={ handleCloseDialog }
                 onDelete={ handleDelete }
@@ -366,4 +365,4 @@ const PrinterALTemplate = () => {
     )
 }
 
-export default PrinterALTemplate
+export default PrinterCUTemplate

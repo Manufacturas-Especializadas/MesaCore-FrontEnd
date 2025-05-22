@@ -1,4 +1,4 @@
-import RegisterCUTemplate from "../../../../components/Templates/RegisterCUTemplate"
+import RegisterCUTemplate from "../../../../components/Templates/Printers/CU/RegisterCUTemplate";
 
 const RegisterCu = () => {
     return (

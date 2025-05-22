@@ -1,4 +1,4 @@
-import EditCUTemplate from "../../../../components/Templates/EditCUTemplate"
+import EditCUTemplate from "../../../../components/Templates/Printers/CU/EditCUTemplate";
 
 const EditCU = () => {
     return (

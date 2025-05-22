@@ -2,7 +2,7 @@ import { Alert, Button, MenuItem, Snackbar, TextField, styled, Typography } from
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import config from "../../../config";
+import config from "../../../../../config";
 
 
 const VisuallyHiddenInput = styled('input')({

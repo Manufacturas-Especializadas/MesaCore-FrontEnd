@@ -1,4 +1,4 @@
-import DetailsCUTemplate from "../../../../components/Templates/DetailsCUTemplate"
+import DetailsCUTemplate from "../../../../components/Templates/Printers/CU/DetailsCUTemplate";
 
 const Details = () => {
     return (

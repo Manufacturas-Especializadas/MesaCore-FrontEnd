@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText } from "@mui/material";
 import { useEffect, useState } from "react";
-import config from "../../../config";
+import config from "../../../../../config";
 
 const DetailsALTemplate = ({ show, handlClose, printerId }) => {
     const[printer, setPrinter] = useState(null);

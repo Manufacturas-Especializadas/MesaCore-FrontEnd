@@ -1,4 +1,4 @@
-import DeleteCUTemplate from "../../../../components/Templates/DeleteCUTemplate"
+import DeleteCUTemplate from "../../../../components/Templates/Printers/CU/DeleteCUTemplate";
 
 const DeleteCU = () => {
     return (

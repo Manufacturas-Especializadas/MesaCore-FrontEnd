@@ -1,4 +1,4 @@
-import DashboardTemplate from '../../components/Templates/DashboardTemplate';
+import DashboardTemplate from '../../components/Templates/Dashboard/DashboardTemplate';
 
 const Dashboard = () => {
     return (

@@ -2,7 +2,7 @@ import { Box, TextField, MenuItem, styled, Button, Paper, Typography, Grid2, Gri
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import config from "../../../config";
+import config from "../../../../config";
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',

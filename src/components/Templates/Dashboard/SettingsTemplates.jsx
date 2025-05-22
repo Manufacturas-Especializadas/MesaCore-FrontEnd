@@ -1,7 +1,7 @@
 import { Card, CardActionArea, CardContent, Icon, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { carData } from "../../data/cardData";
-import { useAuth } from "../../context/AuthContext";
+import { carData } from "../../../data/cardData";
+import { useAuth } from "../../../context/AuthContext";
 
 const SettingsTemplates = () => {
     const { user } = useAuth();

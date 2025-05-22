@@ -1,4 +1,4 @@
-import PrintersTemplate from "../../../components/Templates/PrintersTemplate"
+import PrintersTemplate from "../../../components/Templates/Printers/PrintersTemplate";
 
 const Printers = () => {
 

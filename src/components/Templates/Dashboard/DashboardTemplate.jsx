@@ -1,11 +1,11 @@
 import { Box, CircularProgress, Grid2, Tab, Tabs, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import CardCUTemplate from "../Card/CardCUTemplate";
-import RequestNewPrintTemplate from "./RequestNewPrintTemplate";
+import CardCUTemplate from "../../Card/CardCUTemplate";
+import RequestNewPrintTemplate from "../RequestNewPrintTemplate";
 import { useNavigate } from "react-router-dom";
-import CardALTemplate from "../Card/CardALTemplate";
-import { getAuthHeaders } from "../../utils/AuthHeaders";
-import config from "../../../config";
+import CardALTemplate from "../../Card/CardALTemplate";
+import { getAuthHeaders } from "../../../utils/AuthHeaders";
+import config from "../../../../config";
 
 
 const DashboardTemplate = () => {

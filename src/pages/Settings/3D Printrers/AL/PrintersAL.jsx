@@ -1,4 +1,4 @@
-import PrinterALTemplate from "../../../../components/Templates/PrinterALTemplate"
+import PrinterALTemplate from "../../../../components/Templates/Printers/AL/PrinterALTemplate";
 
 const PrintersAL = () => {
 

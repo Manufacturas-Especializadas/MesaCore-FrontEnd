@@ -1,4 +1,4 @@
-import PrinterCUTemplate from "../../../../components/Templates/PrinterCUTemplate";
+import PrinterCUTemplate from "../../../../components/Templates/Printers/CU/PrinterCUTemplate";
 
 const PrintersCu = () => {
     return (

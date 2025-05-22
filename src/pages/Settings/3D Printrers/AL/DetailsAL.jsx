@@ -1,4 +1,4 @@
-import DetailsALTemplate from "../../../../components/Templates/DetailsALTemplate"
+import DetailsALTemplate from "../../../../components/Templates/Printers/AL/DetailsALTemplate";
 
 const DetailsAL = () => {
     return (

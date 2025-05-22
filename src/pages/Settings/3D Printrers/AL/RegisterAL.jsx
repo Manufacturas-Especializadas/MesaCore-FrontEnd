@@ -1,4 +1,4 @@
-import RegisterALTemplate from "../../../../components/Templates/RegisterALTemplate"
+import RegisterALTemplate from "../../../../components/Templates/Printers/AL/RegisterALTemplate";
 
 const RegisterAL = () => {
     return (

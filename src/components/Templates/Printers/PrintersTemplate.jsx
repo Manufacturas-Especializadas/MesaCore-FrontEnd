@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { cardDataPrinters } from "../../data/cardDataPrinters";
+import { cardDataPrinters } from "../../../data/cardDataPrinters";
 import { Card, CardActionArea, CardContent ,Icon, Typography } from "@mui/material";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 
 const PrintersTemplate = () => {
     const { user } = useAuth();

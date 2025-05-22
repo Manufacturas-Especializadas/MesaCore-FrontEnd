@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MenuItem, TextField, Button, Snackbar, Alert, styled, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import config from "../../../config";
+import config from "../../../../../config";
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -55,7 +55,7 @@ const EditALTemplate = () => {
 
         const getPrinterById = async () => {
             try {
-                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerImpresoraPorId/${id}`);
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerImpresoraCobrePorId/${id}`);
                 
                 if (!response.ok) {
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -80,7 +80,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getPlanta = async () =>{
             try{
-                const reponse = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaPlanta`);
+                const reponse = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaPlanta`);
                 const data = await reponse.json();
                 setPlanta(data);
             }catch(error){
@@ -94,7 +94,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const fetchEstatus = async () => {
             try{
-                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaEstatusProyecto`);
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaEstatusProyecto`);
     
                 if(!response.ok){
                     throw new Error(`Error al hacer fetching: ${response.statusText}`);
@@ -112,7 +112,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getCliente = async () => {
             try{
-                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaCliente`);
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaCliente`);
                 const data = await response.json();
                 setCliente(data);
             }catch(error){
@@ -125,7 +125,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getSolicitante = async () =>{
             try{
-                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaSolicitante`);
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaSolicitante`);
                 const data = await response.json();
                 setSolicitante(data);
             }catch(error){
@@ -138,7 +138,7 @@ const EditALTemplate = () => {
     useEffect(() => {
         const getEstatus = async () => {
             try{
-                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaEstatus`);
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaEstatus`);
                 const data = await response.json();
                 setEstatus(data);
             }catch(error){
@@ -205,7 +205,13 @@ const EditALTemplate = () => {
             formDataToSend.append("FormFile", formData.archivoFai || null);
             formDataToSend.append("estatusProyectoId", formData.estatusProyectoId);
 
-            const response = await fetch(`${config.apiUrl}/Impresoras/Actualizar/${formData.id}`, {
+            if(formData.archivoFai){
+                formDataToSend.append("FormFile", formData.archivoFai);
+            } else{
+                formDataToSend.append("FormFile", "");
+            }
+
+            const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Actualizar/${formData.id}`, {
                 method: 'PUT',
                 body: formDataToSend,
             });
@@ -217,10 +223,10 @@ const EditALTemplate = () => {
 
             setOpenSnackbar(true);
             setTimeout(() => {
-                handleNavigate("/settings/printers/al");
+                handleNavigate("/settings/printers/cu");
             }, 3000);
         } catch (error) {
-            console.error("Error: ", error);
+            console.error(`Error: ${error.message}`);
         }
     };
 
@@ -383,7 +389,7 @@ const EditALTemplate = () => {
                             type="date"
                             fullWidth
                             variant="outlined"
-                            label="Entrega laboratorio"
+                            helperText="Entrega laboratorio"
                             name="entregaLaboratorio"
                             value={ formData.entregaLaboratorio || ""}
                             onChange={ handleChange }
@@ -393,7 +399,7 @@ const EditALTemplate = () => {
                             type="date"
                             fullWidth
                             variant="outlined"
-                            label="Liberación laboratorio"
+                            helperText="Liberación laboratorio"
                             name="liberacionLaboratorio"
                             value={ formData.liberacionLaboratorio || "" }
                             onChange={ handleChange }
@@ -484,7 +490,7 @@ const EditALTemplate = () => {
                                 color="error"
                                 size="large"
                                 variant="outlined"
-                                onClick={() => handleNavigate("/settings/printers/al")}
+                                onClick={() => handleNavigate("/settings/printers/cu")}
                             >
                                 CANCELAR
                             </Button>

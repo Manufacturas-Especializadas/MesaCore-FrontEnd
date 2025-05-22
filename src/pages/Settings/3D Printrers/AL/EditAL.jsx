@@ -1,4 +1,4 @@
-import EditALTemplate from "../../../../components/Templates/EditALTemplate"
+import EditALTemplate from "../../../../components/Templates/Printers/AL/EditALTemplate"
 
 const EditAL = () => {
     return (
