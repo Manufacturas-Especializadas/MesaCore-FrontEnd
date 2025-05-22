@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Container, Snackbar, TextField, Typography } from "@mui/material"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
-import config from "../../../config";
+import config from "../../../../../config";
 
 const ImpressionsRegisterTemplate = () => {
     const[formData, setFormData] = useState({

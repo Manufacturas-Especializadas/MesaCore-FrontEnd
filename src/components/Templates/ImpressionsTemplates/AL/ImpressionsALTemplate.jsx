@@ -25,7 +25,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import ImpressionsAlDeleteTemplate from "./ImpressionsAlDeleteTemplate";
-import config from "../../../config";
+import config from "../../../../../config";
 import ImpressionsAlDetailsTemplate from "./ImpressionsAlDetailsTemplate";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

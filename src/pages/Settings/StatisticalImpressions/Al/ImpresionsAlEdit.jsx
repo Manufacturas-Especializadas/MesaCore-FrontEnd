@@ -1,4 +1,4 @@
-import ImpressionsAlEditTemplate from "../../../../components/Templates/ImpressionsAlEditTemplate"
+import ImpressionsAlEditTemplate from "../../../../components/Templates/ImpressionsTemplates/AL/ImpressionsAlEditTemplate";
 
 
 const ImpresionsAlEdit = () => {

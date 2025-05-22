@@ -1,4 +1,4 @@
-import ImpressionsRegisterTemplate from "../../../../components/Templates/ImpressionsRegisterTemplate"
+import ImpressionsRegisterTemplate from "../../../../components/Templates/ImpressionsTemplates/AL/ImpressionsRegisterTemplate";
 
 const ImpressionsRegisterAl = () => {
     return (

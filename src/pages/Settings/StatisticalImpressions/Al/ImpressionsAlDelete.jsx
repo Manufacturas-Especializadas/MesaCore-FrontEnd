@@ -1,4 +1,4 @@
-import ImpressionsAlDeleteTemplate from "../../../../components/Templates/ImpressionsAlDeleteTemplate"
+import ImpressionsAlDeleteTemplate from "../../../../components/Templates/ImpressionsTemplates/AL/ImpressionsAlDeleteTemplate"
 
 const ImpressionsAlDelete = () => {
     return (

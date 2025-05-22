@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { impressionsCardData } from "../../data/impressionsCardData"
+import { impressionsCardData } from "../../../data/impressionsCardData"
 import { Card, CardActionArea, CardContent, Icon, Typography } from "@mui/material"
 
 const ImpressionsTemplate = () => {

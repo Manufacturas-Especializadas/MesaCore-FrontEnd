@@ -1,4 +1,4 @@
-import ImpressionsALTemplate from "../../../../components/Templates/ImpressionsALTemplate"
+import ImpressionsALTemplate from "../../../../components/Templates/ImpressionsTemplates/AL/ImpressionsALTemplate";
 
 const Impressions = () => {
     return (

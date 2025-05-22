@@ -1,7 +1,7 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import config from "../../../config";
+import config from "../../../../../config";
 
 const ImpressionsAlEditTemplate = () => {
     const[formData, setFormData] = useState({
