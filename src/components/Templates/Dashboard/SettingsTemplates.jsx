@@ -11,8 +11,8 @@ const SettingsTemplates = () => {
 
     return (
         <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 
-                    gap-2 justify-center items-center min-h-screen">                
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 
+                    gap-3 justify-center items-center min-h-screen">                
                 {
                     items.map((item) => (
                         <Link key={ item.title } to={ item.path } className="underline-none">
