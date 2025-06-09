@@ -26,6 +26,15 @@ import Impressions from "../pages/Settings/StatisticalImpressions/Impressions";
 import ImpressionsAl from "../pages/Settings/StatisticalImpressions/Al/ImpressionsAl";
 import ImpressionsRegisterAl from "../pages/Settings/StatisticalImpressions/Al/ImpressionsAlRegister";
 import ImpressionsAlEdit from "../pages/Settings/StatisticalImpressions/Al/ImpresionsAlEdit";
+import ProjectIndex from "../pages/Settings/3D Printrers/Projects/ProjectIndex";
+
+//Proyectos de impresoras 3D
+import ProjectALIndex from "../pages/Settings/3D Printrers/Projects/AL/ProjectALIndex";
+import ProjectALRegister from "../pages/Settings/3D Printrers/Projects/AL/ProjectALRegister";
+import ProjectALEdit from "../pages/Settings/3D Printrers/Projects/AL/ProjectALEdit";
+import ProjectCUIndex from "../pages/Settings/3D Printrers/Projects/CU/ProjectCUIndex";
+import ProjectCURegister from "../pages/Settings/3D Printrers/Projects/CU/ProjectCURegister";
+import ProjectCUEdit from "../pages/Settings/3D Printrers/Projects/CU/ProjectCUEdit";
 
 const MyRoutes = () => {
     return (
@@ -49,6 +58,23 @@ const MyRoutes = () => {
                 {/* Configuración */}
                 <Route path="settings">
                     <Route index element={<Settings />} />
+
+                    {/* Proyectos */}
+                    <Route path="projects">
+                        <Route index element={<ProjectIndex/>}/>
+
+                        <Route path="al">
+                            <Route index element={<ProjectALIndex/>}/>
+                            <Route path="register" element={<ProjectALRegister/>}/>
+                            <Route path="edit/:id" element={<ProjectALEdit/>}/>
+                        </Route>
+
+                        <Route path="cu">
+                            <Route index element={<ProjectCUIndex/>}/>
+                            <Route path="register" element={<ProjectCURegister/>}/>
+                            <Route path="edit/:id" element={<ProjectCUEdit/>}/>
+                        </Route>
+                    </Route>
 
                     {/* Impresoras 3D */}
                     <Route path="printers">
