@@ -1,24 +1,28 @@
 import { Box, Button, Card, CardContent, Chip, Dialog, DialogContent, Typography } from "@mui/material";
 import { AccessTime as AccessTimeIcon, Person as PersonIcon } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DetailsCardALTemplate from "../Templates/DetailsCardALTemplate";
 import config from "../../../config";
 
 const CardALTemplate = ({ printer }) => {
-    const[selectedPrinterId, setSelectedPrinterId] = useState(null);
-    const[printersDetails, setPrintersDetails] = useState(null);
+    const [selectedPrinterId, setSelectedPrinterId] = useState(null);
+    const [printersDetails, setPrintersDetails] = useState(null);
 
     const fetchPrintersDetails = async (nombreDelProyecto) => {
         try {
             const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerImpresorasAluminioPorNombreProyecto/${encodeURIComponent(nombreDelProyecto)}`);
+    
             if (!response.ok) {
-                throw new Error(`Error al cargar los datos: ${response.statusText}`);
+                throw new Error(`Error al cargar los datos: ${response.status} - ${response.statusText}`);
             }
-
+        
             const data = await response.json();
             setPrintersDetails(data);
+            setSelectedPrinterId(nombreDelProyecto);
+    
         } catch (error) {
-            console.error(`Error: ${error}`);
+            console.error(`Error al obtener detalles:`, error.message);
+            setPrintersDetails(null); 
         }
     };
 
@@ -28,7 +32,7 @@ const CardALTemplate = ({ printer }) => {
         "Finalizado": "#4caf50",        
     };
     
-    const getStatusColor = (status) =>{
+    const getStatusColor = (status) => {
         return statusColor[status] || "#000";
     };
 
@@ -69,12 +73,12 @@ const CardALTemplate = ({ printer }) => {
                 <CardContent>
                     <Box sx={{ display:"flex", justifyContent: "space-between", alignItems: "center" }}>
                         <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-                            Proyecto: { printer.nombreDelProyecto }
+                            Proyecto: { printer.nombreDelProyecto || "N/A" }
                         </Typography>
                         <Chip
-                            label={ printer.estatusProyecto || "Desconocido" }
+                            label={ printer.estatusNombre || "Desconocido" }
                             sx={{
-                                backgroundColor: getStatusColor(printer.estatusProyecto),
+                                backgroundColor: getStatusColor(printer.estatusNombre),
                                 color: "#fff",
                                 fontWeight: "bold",
                                 fontSize: "0.8rem",
@@ -86,11 +90,11 @@ const CardALTemplate = ({ printer }) => {
                     <Box sx={{ mt: 2 }}>
                         <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, gap: "0.3rem" }}>
                             <PersonIcon sx={{ mr: 1 }}/> 
-                            <strong> Solicitante: </strong> { printer.solicitanteNombre }
+                            <strong> Solicitante: </strong> { printer.solicitanteNombre || "No especificado" }
                         </Typography>
                         <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, gap: "0.3rem" }}>
                             <AccessTimeIcon sx={{ mr: 1 }} /> 
-                            <strong> Fecha de la solicitud: </strong> { formatDate(printer.fechaDeLaSolicitud) }
+                            <strong> Fecha de la solicitud: </strong> { formatDate(printer.fechaSolicitud) }
                         </Typography>
                     </Box>
                 </CardContent>
@@ -106,21 +110,21 @@ const CardALTemplate = ({ printer }) => {
                 </Box>
             </Card>
 
-            <Dialog open={!!selectedPrinterId} onClose={ handleCloseDetails } fullWidth maxWidth="md">
+            <Dialog open={ !!selectedPrinterId } onClose={ handleCloseDetails } fullWidth maxWidth="md">
                 <DialogContent>
                     {
-                        printersDetails &&(
+                        printersDetails && (
                             <DetailsCardALTemplate 
                                 printer={ printersDetails } 
                                 onClose={ handleCloseDetails }
                                 onRefresh={() => fetchPrintersDetails(selectedPrinterId)}
                             />
-                        )
+                        )                        
                     }
                 </DialogContent>
             </Dialog>
         </>
-    )
-}
+    );
+};
 
-export default CardALTemplate
+export default CardALTemplate;

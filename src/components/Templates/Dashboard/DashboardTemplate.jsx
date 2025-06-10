@@ -69,6 +69,7 @@ const DashboardTemplate = () => {
                     return
                 }
                 const data = await response.json();
+                console.log("Datos Obtener: ", data)
                 setPrinterAluminio(data);
             } catch (error) {
                 console.error("Error", error);

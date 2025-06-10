@@ -159,6 +159,7 @@ const PrinterALTemplate = () => {
                     throw new Error("Error en el fetching");
                 }
                 const data = await response.json();
+                console.log("Datos: ", data)
                 setPrinters(data.data);
                 setTotalRecords(data.totalRecords);
 
@@ -236,14 +237,11 @@ const PrinterALTemplate = () => {
                                 <StyledTableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
                                     Estatus
                                 </StyledTableCell>
+                                <StyledTableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
+                                    Proyecto
+                                </StyledTableCell>
                                 <StyledTableCell sx={{textAlign: 'center'}}>
                                     Código
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    Planta
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    Solicitante
                                 </StyledTableCell>
                                 <StyledTableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
                                     Cliente
@@ -282,10 +280,11 @@ const PrinterALTemplate = () => {
                                                 {item.estatusId || "Desconocido"}
                                             </StyledTableCell>
                                             <StyledTableCell sx={{ display: { xs: 'none', sm: 'table-cell' }, textAlign: 'center' }}>
+                                                {item.nombreProyecto}
+                                            </StyledTableCell>
+                                            <StyledTableCell sx={{ display: { xs: 'none', sm: 'table-cell' }, textAlign: 'center' }}>
                                                 {item.codigo}
                                             </StyledTableCell>
-                                            <StyledTableCell>{item.plantId}</StyledTableCell>
-                                            <StyledTableCell>{item.solicitanteId}</StyledTableCell>
                                             <StyledTableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
                                                 {item.clienteId}
                                             </StyledTableCell>
