@@ -24,23 +24,21 @@ const DashboardTemplate = () => {
     }
 
     useEffect(() => {
-        const fetchPrinters = async () => {
+        const fetchPrintersCobre = async () => {
             setLoading(true);
             try {
                 const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Obtener`, {
                     method: "GET",
                     headers: {
-                        "Content-Type" : "application/json",
+                        "Content-Type": "application/json",
                         ...getAuthHeaders()
                     }
                 });
-
                 if(response.status === 401){
                     localStorage.removeItem("token");
                     handleNavigate("/login");
                     return
                 }
-
                 const data = await response.json();
                 setPrinterCobre(data);
             } catch (error) {
@@ -49,7 +47,7 @@ const DashboardTemplate = () => {
                 setLoading(false);
             }
         };
-        fetchPrinters();
+        fetchPrintersCobre();
     }, []);
 
     useEffect(() => {
@@ -69,7 +67,6 @@ const DashboardTemplate = () => {
                     return
                 }
                 const data = await response.json();
-                console.log("Datos Obtener: ", data)
                 setPrinterAluminio(data);
             } catch (error) {
                 console.error("Error", error);

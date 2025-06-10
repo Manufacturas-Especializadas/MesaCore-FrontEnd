@@ -69,12 +69,12 @@ const CardCUTemplate = ({ printer }) => {
                 <CardContent>
                     <Box sx={{ display:"flex", justifyContent: "space-between", alignItems: "center" }}>
                         <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-                            Proyecto: { printer.nombreDelProyecto }
+                            Proyecto: { printer.nombreDelProyecto || "N/A" }
                         </Typography>
                         <Chip
-                            label={ printer.estatusProyecto || "Desconocido" }
+                            label={ printer.estatusNombre || "Desconocido" }
                             sx={{
-                                backgroundColor: getStatusColor(printer.estatusProyecto),
+                                backgroundColor: getStatusColor(printer.estatusNombre),
                                 color: "#fff",
                                 fontWeight: "bold",
                                 fontSize: "0.8rem",
@@ -86,11 +86,11 @@ const CardCUTemplate = ({ printer }) => {
                     <Box sx={{ mt: 2 }}>
                         <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, gap: "0.3rem" }}>
                             <PersonIcon sx={{ mr: 1 }}/> 
-                            <strong> Solicitante: </strong> { printer.solicitanteNombre }
+                            <strong> Solicitante: </strong> { printer.solicitanteNombre || "No especificado" }
                         </Typography>
                         <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mb: 1, gap: "0.3rem" }}>
                             <AccessTimeIcon sx={{ mr: 1 }} /> 
-                            <strong> Fecha de la solicitud: </strong> { formatDate(printer.fechaDeLaSolicitud) }
+                            <strong> Fecha de la solicitud: </strong> { formatDate(printer.fechaSolicitud) }
                         </Typography>
                     </Box>
                 </CardContent>

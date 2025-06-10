@@ -79,6 +79,10 @@ const DetailsCUTemplate = ({ printer, onClose, onRefresh }) => {
             <Typography variant="h6" sx={{ mb: 2 }}>
                 Proyecto: { printer.nombreDelProyecto }
             </Typography>
+
+            <Typography variant="body1" gutterBottom>
+                <strong>Planta:</strong> {printer.plantaNombre || "Sin planta"}
+            </Typography> 
             
             <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
                 Números de Parte
@@ -100,17 +104,11 @@ const DetailsCUTemplate = ({ printer, onClose, onRefresh }) => {
                                             </Typography>
                                             <Typography variant="caption" sx={{ m: 1 }}>
                                                 <strong> Revisión: </strong> { impresion.revision }
-                                            </Typography>
-                                            <Typography variant="caption" sx={{ m: 1 }}>
-                                                <strong> Cliente: </strong> { impresion.cliente?.nombre }
-                                            </Typography>
-                                            <Typography variant="caption" sx={{ m: 1 }}>
-                                                <strong> Planta:  </strong> { impresion.planta?.nombre }
-                                            </Typography>
+                                            </Typography>                                           
                                             <Chip
-                                                label={ impresion.estatus?.nombre || "Desconocido" }
+                                                label={ impresion.estatusNombre || "Desconocido" }
                                                 sx={{
-                                                    backgroundColor: getStatusColor(impresion.estatus?.nombre),
+                                                    backgroundColor: getStatusColor(impresion.estatusNombre),
                                                     color: "#fff",
                                                     fontWeight: "bold",
                                                     fontSize: "0.8rem",

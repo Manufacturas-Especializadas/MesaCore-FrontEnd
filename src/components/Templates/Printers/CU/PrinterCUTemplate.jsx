@@ -234,14 +234,11 @@ const PrinterCUTemplate = () => {
                                 <StyledTableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
                                     Estatus
                                 </StyledTableCell>
+                                <StyledTableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
+                                    Proyecto
+                                </StyledTableCell>
                                 <StyledTableCell sx={{textAlign: 'center'}}>
                                     Código
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    Planta
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    Solicitante
                                 </StyledTableCell>
                                 <StyledTableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
                                     Cliente
@@ -280,10 +277,11 @@ const PrinterCUTemplate = () => {
                                                 {item.estatusId || "Desconocido"}
                                             </StyledTableCell>
                                             <StyledTableCell sx={{ display: { xs: 'none', sm: 'table-cell' }, textAlign: 'center' }}>
+                                                {item.nombreProyecto}
+                                            </StyledTableCell>
+                                            <StyledTableCell sx={{ display: { xs: 'none', sm: 'table-cell' }, textAlign: 'center' }}>
                                                 {item.codigo}
                                             </StyledTableCell>
-                                            <StyledTableCell>{item.plantId}</StyledTableCell>
-                                            <StyledTableCell>{item.solicitanteId}</StyledTableCell>
                                             <StyledTableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
                                                 {item.clienteId}
                                             </StyledTableCell>
@@ -317,7 +315,6 @@ const PrinterCUTemplate = () => {
                                                 >
                                                     <DeleteIcon/>
                                                 </IconButton>
-
                                             </StyledTableCell>
                                         </StyledTableRow>
                                     ))

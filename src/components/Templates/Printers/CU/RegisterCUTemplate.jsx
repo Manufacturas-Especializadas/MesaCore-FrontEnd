@@ -18,9 +18,8 @@ const VisuallyHiddenInput = styled('input')({
 
 const RegisterCUTemplate = () => {
     const[formData, setFormData] = useState({
+        proyectoId: "",
         codigo: "",
-        plantaId: "",
-        solicitanteId: "",
         clienteId: "",
         nDibujo: "",
         nParte: "",
@@ -28,53 +27,31 @@ const RegisterCUTemplate = () => {
         entregaLaboratorio: null,
         fai: "",
         liberacionLaboratorio: null,
-        fechaDeLaSolicitud: "",
         estatusId: "",
         comentarios: "",
         archivoFai: null,
-        nombreDelProyecto: "",
-        estatusProyectoId: ""
     });
 
-    const[planta, setPlanta] = useState([]);
+    const[listaProyecto, setListaProyecto] = useState([]);
     const[cliente, setCliente] = useState([]);
-    const[solicitante, setSolicitante] = useState([]);
-    const[estatusProyecto, setEstatusProyecto] = useState([]);
     const[estatus, setEstatus] = useState([]);
     const[openSnackbar, setOpenSnackbar] = useState(false);
     const[fileName, setFileName] = useState("");
     const navigate = useNavigate();    
 
     useEffect(() => {
-        const getPlanta = async () =>{
+        const getListaProyecto = async () => {
             try{
-                const reponse = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaPlanta`);
-                const data = await reponse.json();
-                setPlanta(data);
+                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaProyectosCu`);
+                const data = await response.json();
+                console.log("Lista de proyecto", data);
+                setListaProyecto(data);
             }catch(error){
-                console.log("Error en el fetching", error);
-            }
-        };
-
-        getPlanta();
-    }, []);
-
-    useEffect(() => {     
-        const fetchEstatus = async () => {
-            try{
-                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaEstatusProyecto`);
-    
-                if(!response.ok){
-                    throw new Error(`Error al hacer fetching: ${response.statusText}`);
-                }
-    
-                const data = await response.json();                
-                setEstatusProyecto(data);
-            }catch(error){
-                console.log(`Error: ${error}`);
+                console.error("Error en el fetching: ", error);
             }
         }
-        fetchEstatus();
+
+        getListaProyecto();
     }, []);
 
     useEffect(() => {
@@ -91,19 +68,6 @@ const RegisterCUTemplate = () => {
     }, []);
 
     useEffect(() => {
-        const getSolicitante = async () =>{
-            try{
-                const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaSolicitante`);
-                const data = await response.json();
-                setSolicitante(data);
-            }catch(error){
-                console.log("Error en el fetching", error);            
-            }
-        }
-        getSolicitante();
-    }, []);
-
-    useEffect(() => {
         const getEstatus = async () => {
             try{
                 const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaEstatus`);
@@ -116,33 +80,19 @@ const RegisterCUTemplate = () => {
         getEstatus();
     }, []);
 
-    function convertyEmptyToNull(data) {
-        const newData = { ...data };
-        for(const key in newData){
-            if(typeof newData[key] === "string" && newData[key].trim() === ""){
-                newData[key] = null
-            }
-        }
 
-        return newData;
-    };
-
-   const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const validateFormData = () => {
                 const requiredFields = [
+                    "proyectoId",
                     "codigo",
-                    "plantaId",
-                    "solicitanteId",
                     "clienteId",
                     "nDibujo",
                     "nParte",
                     "revision",
-                    "fechaDeLaSolicitud",
                     "estatusId",
-                    "nombreDelProyecto",
-                    "estatusProyectoId",
                 ];
 
                 for (const field of requiredFields) {
@@ -173,9 +123,8 @@ const RegisterCUTemplate = () => {
             validateFormData();
 
             const formDataToSend = new FormData();
+            formDataToSend.append("proyectoId", formData.proyectoId);
             formDataToSend.append("codigo", formData.codigo);
-            formDataToSend.append("PlantaId", formData.plantaId);
-            formDataToSend.append("solicitanteId", formData.solicitanteId);
             formDataToSend.append("clienteId", formData.clienteId);
             formDataToSend.append("nDibujo", formData.nDibujo);
             formDataToSend.append("nParte", formData.nParte);
@@ -183,12 +132,9 @@ const RegisterCUTemplate = () => {
             formDataToSend.append("EntregaLaboratorio", formData.entregaLaboratorio ?? "");
             formDataToSend.append("fai", formData.fai ?? "");
             formDataToSend.append("LiberacionLaboratorio", formData.liberacionLaboratorio ?? "");
-            formDataToSend.append("fechaDeLaSolicitud", formData.fechaDeLaSolicitud);
             formDataToSend.append("estatusId", formData.estatusId);
             formDataToSend.append("comentarios", formData.comentarios ?? "");
             formDataToSend.append("FormFile", formData.archivoFai || null); 
-            formDataToSend.append("nombreDelProyecto", formData.nombreDelProyecto);
-            formDataToSend.append("estatusProyectoId", formData.estatusProyectoId);
 
             const response = await fetch(`${config.apiUrl}/ImpresorasCobre/Registrar`, {
                 method: "POST",
@@ -256,109 +202,40 @@ const RegisterCUTemplate = () => {
                     <h2 className="card-title"> REGISTRO -  FX</h2>
                     <form className="card-form" onSubmit={ handleSubmit }>
                         
-                        <TextField
-                            fullWidth
-                            label="Nombre del proyecto"
-                            required
-                            variant="outlined"
-                            name="nombreDelProyecto"
-                            value={ formData.nombreDelProyecto || "" }
-                            onChange={ handleChange }
-                        />
-
-                        <TextField
-                            required
-                            fullWidth
-                            select                            
-                            variant="outlined"
-                            label="Estatus del proyecto"
-                            name="estatusProyectoId"
-                            value={
-                                estatusProyecto.some((item) => item.id === formData.estatusProyectoId)
-                                    ? formData.estatusProyectoId
-                                    : ""
-                            }
-                            disabled={ estatusProyecto.length === 0 }
-                            onChange={ handleChange }
-                            sx={{
-                                minWidth: "200px",
-                                mr: 5,
-                                "& .MuiInputBase-root": {
-                                    fontSize: { xs: "0.875rem", sm: "1rem" },
-                                },
-                            }}
-                        >                            
-                            {estatusProyecto.map((item) => (
-                                <MenuItem key={ item.id } value={ item.id }>
-                                    { item.nombre }
-                                </MenuItem>
-                            ))}
-                        </TextField>
-
-                        <TextField
-                            fullWidth
-                            type="date"
-                            variant="outlined"
-                            name="fechaDeLaSolicitud"
-                            helperText="Fecha de la solicitud del proyecto"
-                            value={ formData.fechaDeLaSolicitud || "" }
-                            onChange={ handleChange }
-                        />
-
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            label="Codigo"
-                            name="codigo"
-                            value={ formData.codigo || "" }
-                            onChange={ handleChange }
-                        />
-
-                        <TextField
-                            select
-                            variant="outlined"
-                            label="Solicitante"
-                            name="solicitanteId"
-                            required
-                            value={ solicitante.some((item) => item.id === formData.solicitanteId) ? formData.solicitanteId : "" }
-                            disabled={ solicitante.length === 0 }
-                            onChange={ handleChange }
-                        >
-                        {
-                            solicitante.map((item) => (
-                                <MenuItem key={ item.id } value={ item.id }>
-                                    { item.nombre }
-                                </MenuItem>
-                            ))
-                        }
-                        </TextField>
-
-                        <TextField
-                            select
-                            variant="outlined"
-                            label="Planta"
-                            name="plantaId"
-                            required
-                            value={ planta.some((item) => item.id === formData.plantaId) ? formData.plantaId : "" }
-                            disabled={ planta.length === 0 }
-                            onChange={ handleChange }
-                        >
-                        {
-                            planta.map((item) => (
-                                <MenuItem key={ item.id } value={ item.id }>
-                                    { item.nombre }
-                                </MenuItem>
-                            ))
-                        }
+                    <TextField
+                        select
+                        required
+                        fullWidth
+                        variant="outlined"
+                        label="Nombre del proyecto"
+                        name="proyectoId"
+                        value={formData.proyectoId || ""}
+                        disabled={estatus.length === 0}
+                        onChange={handleChange}
+                    >
+                        {listaProyecto.map((item) => (
+                            <MenuItem key={item.id} value={item.id}>
+                                {item.nombreDelProyecto}
+                            </MenuItem>
+                        ))}
                     </TextField>
 
                     <TextField
+                        fullWidth
+                        variant="outlined"
+                        label="Codigo"
+                        name="codigo"
+                        value={ formData.codigo || "" }
+                        onChange={ handleChange }
+                    />
+
+                    <TextField
                         select
+                        required
                         fullWidth
                         variant="outlined"
                         label="Cliente"
                         name="clienteId"
-                        required
                         value={ cliente.some((item) => item.id === formData.clienteId) ? formData.clienteId : "" }
                         disabled={ cliente.length === 0 }
                         onChange={ handleChange }
@@ -401,18 +278,20 @@ const RegisterCUTemplate = () => {
                     />
                 
                     <TextField
-                        type="date"
+                        required
                         fullWidth
+                        type="date"
                         variant="outlined"
-                        helperText="Entrega laboratorio"
                         name="entregaLaboratorio"
+                        helperText="Entrega laboratorio"
                         value={ formData.entregaLaboratorio || ""}
                         onChange={ handleChange }
                     />
 
                     <TextField
-                        type="date"
+                        required
                         fullWidth
+                        type="date"
                         variant="outlined"
                         name="liberacionLaboratorio"
                         helperText="Liberación laboratorio"
@@ -422,6 +301,8 @@ const RegisterCUTemplate = () => {
 
                     <TextField
                         select
+                        required
+                        fullWidth
                         variant="outlined"
                         label="Estatus"
                         name="estatusId"
@@ -443,11 +324,10 @@ const RegisterCUTemplate = () => {
                         fullWidth
                         variant="outlined"
                         label="FAI"
-                        name="fai"
+                        name="fai"                            
                         value={ formData.fai || "" }
                         onChange={ handleChange }
                     />
-
 
                     <TextField                        
                         multiline
