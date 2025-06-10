@@ -67,7 +67,7 @@ const ProjectALRegisterTemplate = () => {
     useEffect(() => {
         const fetchPlanta = async () => {
             try{
-                const response = await fetch(`${config.apiUrl}/ProyectosAL/ProyectosAL/ObtenerPlantaProyectos`);
+                const response = await fetch(`${config.apiUrl}/ProyectosAL/ObtenerPlantaProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -86,7 +86,7 @@ const ProjectALRegisterTemplate = () => {
     useEffect(() => {
         const fetchEstatusProyecto = async () => {
             try{
-                const response = await fetch(`${config.apiUrl}/ProyectosAL/ProyectosAL/ObtenerEstatusProyectos`);
+                const response = await fetch(`${config.apiUrl}/ProyectosAL/ObtenerEstatusProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacher fetching");
