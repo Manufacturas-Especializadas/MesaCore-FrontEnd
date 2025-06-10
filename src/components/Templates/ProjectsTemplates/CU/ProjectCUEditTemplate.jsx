@@ -54,7 +54,7 @@ const ProjectCUEditTemplate = () => {
     useEffect(() => {
         const fetchSolicitante = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosCU/ObtenerSolicitanteProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosCU/ObtenerSolicitanteProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -73,7 +73,7 @@ const ProjectCUEditTemplate = () => {
     useEffect(() => {
         const fetchPlanta = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosCU/ObtenerPlantaProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosCU/ObtenerPlantaProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -92,7 +92,7 @@ const ProjectCUEditTemplate = () => {
     useEffect(() => {
         const fetchEstatusProyecto = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosCU/ObtenerEstatusProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosCU/ObtenerEstatusProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacher fetching");
@@ -111,7 +111,7 @@ const ProjectCUEditTemplate = () => {
     useEffect(() => {
         const fetchProyecto = async () => {
             try{
-                const response = await fetch(`https://localhost:44350/api/ProyectosCU/ObtenerPorId?id=${id}`);
+                const response = await fetch(`${config.apiUrl}/ProyectosCU/ObtenerPorId?id=${id}`);
 
                 if(!response.ok){
                     throw new Error("Error al obtener los datos del proyecto");
@@ -166,7 +166,7 @@ const ProjectCUEditTemplate = () => {
         }
 
         try{
-            const response = await fetch(`https://localhost:44350/api/ProyectosCU/Editar/${formData.id}`, {
+            const response = await fetch(`${config.apiUrl}/ProyectosCU/Editar/${formData.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"

@@ -15,6 +15,7 @@ import {
 from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import config from "../../../../../config";
 
 const ProjectCURegisterTemplate = () => {
     const[formData, setFormData] = useState({
@@ -47,7 +48,7 @@ const ProjectCURegisterTemplate = () => {
     useEffect(() => {
         const fetchSolicitante = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosCU/ObtenerSolicitanteProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosCU/ObtenerSolicitanteProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -66,7 +67,7 @@ const ProjectCURegisterTemplate = () => {
     useEffect(() => {
         const fetchPlanta = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosCU/ObtenerPlantaProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosCU/ObtenerPlantaProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -85,7 +86,7 @@ const ProjectCURegisterTemplate = () => {
     useEffect(() => {
         const fetchEstatusProyecto = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosCU/ObtenerEstatusProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosCU/ObtenerEstatusProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacher fetching");
@@ -131,7 +132,7 @@ const ProjectCURegisterTemplate = () => {
         };
 
         try{
-            const response = await fetch("https://localhost:44350/api/ProyectosCU/Registrar", {
+            const response = await fetch(`${config.apiUrl}/ProyectosCU/Registrar`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

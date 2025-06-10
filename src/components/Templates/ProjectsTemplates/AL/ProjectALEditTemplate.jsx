@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import config from "../../../../../config";
 
 const ProjectALEditTemplate = () => {
     const[formData, setFormData] = useState({
@@ -54,7 +55,7 @@ const ProjectALEditTemplate = () => {
     useEffect(() => {
         const fetchSolicitante = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosAL/ObtenerSolicitanteProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosAL/ObtenerSolicitanteProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -73,7 +74,7 @@ const ProjectALEditTemplate = () => {
     useEffect(() => {
         const fetchPlanta = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosAL/ObtenerPlantaProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosAL/ObtenerPlantaProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -92,7 +93,7 @@ const ProjectALEditTemplate = () => {
     useEffect(() => {
         const fetchEstatusProyecto = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosAL/ObtenerEstatusProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosAL/ObtenerEstatusProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacher fetching");
@@ -111,7 +112,7 @@ const ProjectALEditTemplate = () => {
     useEffect(() => {
         const fetchProyecto = async () => {
             try{
-                const response = await fetch(`https://localhost:44350/api/ProyectosAL/ObtenerPorId?id=${id}`);
+                const response = await fetch(`${config.apiUrl}/ProyectosAL/ObtenerPorId?id=${id}`);
 
                 if(!response.ok){
                     throw new Error("Error al obtener los datos del proyecto");

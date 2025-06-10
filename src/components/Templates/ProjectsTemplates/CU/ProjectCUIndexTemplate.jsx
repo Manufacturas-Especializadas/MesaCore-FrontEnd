@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import ProjectCUDeleteTemplate from "./ProjectCUDeleteTemplate";
+import config from "../../../../../config";
 
 const ProjectCUIndexTemplate = () => {
     const[projectsCU, setProjectsCU] = useState([]);
@@ -81,7 +82,7 @@ const ProjectCUIndexTemplate = () => {
     useEffect(() => {
         const fetchingProjects = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosCU/ObtenerListaDeProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosCU/ObtenerListaDeProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -112,7 +113,7 @@ const ProjectCUIndexTemplate = () => {
         }
     
         try {
-            const response = await fetch(`https://localhost:44350/api/ProyectosCU/Eliminar?id=${id}`, {
+            const response = await fetch(`${config.apiUrl}/ProyectosCU/Eliminar?id=${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"

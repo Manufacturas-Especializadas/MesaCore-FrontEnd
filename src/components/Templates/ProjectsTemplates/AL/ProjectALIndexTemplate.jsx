@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
 import ProjectALDeleteTemplate from "./ProjectALDeleteTemplate";
+import config from "../../../../../config";
 
 const ProjectALIndexTemplate = () => {
     const[projects, setProjects] = useState([]);
@@ -81,7 +82,7 @@ const ProjectALIndexTemplate = () => {
     useEffect(() => {
         const fetchingProjects = async () => {
             try{
-                const response = await fetch("https://localhost:44350/api/ProyectosAL/ObtenerListaDeProyectos");
+                const response = await fetch(`${config.apiUrl}/ProyectosAL/ObtenerListaDeProyectos`);
 
                 if(!response.ok){
                     throw new Error("Error al hacer fetching");
@@ -112,7 +113,7 @@ const ProjectALIndexTemplate = () => {
         }
     
         try {
-            const response = await fetch(`https://localhost:44350/api/ProyectosAL/Eliminar?id=${id}`, {
+            const response = await fetch(`${config.apiUrl}/ProyectosAL/Eliminar?id=${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
