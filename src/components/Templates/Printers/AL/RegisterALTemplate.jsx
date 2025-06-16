@@ -283,7 +283,6 @@ const RegisterALTemplate = () => {
                     />
                 
                     <TextField
-                        required
                         fullWidth
                         type="date"
                         variant="outlined"
