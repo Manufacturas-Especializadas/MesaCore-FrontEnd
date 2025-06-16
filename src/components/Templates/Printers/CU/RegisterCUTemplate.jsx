@@ -278,7 +278,6 @@ const RegisterCUTemplate = () => {
                     />
                 
                     <TextField
-                        required
                         fullWidth
                         type="date"
                         variant="outlined"
@@ -289,7 +288,6 @@ const RegisterCUTemplate = () => {
                     />
 
                     <TextField
-                        required
                         fullWidth
                         type="date"
                         variant="outlined"
