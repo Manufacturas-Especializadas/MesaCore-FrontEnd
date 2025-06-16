@@ -75,7 +75,6 @@ const EditALTemplate = () => {
             try{
                 const response = await fetch(`${config.apiUrl}/ImpresorasCobre/ObtenerListaProyectosCu`);
                 const data = await response.json();
-                console.log("Lista de proyecto", data);
                 setListaProyecto(data);
             }catch(error){
                 console.error("Error en el fetching: ", error);
