@@ -18,29 +18,22 @@ const VisuallyHiddenInput = styled('input')({
 
 const EditALTemplate = () => {
     const[formData, setFormData] = useState({
-        id: "",
+        proyectoId: "",
         codigo: "",
-        plantaId: "",
-        solicitanteId: "",
         clienteId: "",
         nDibujo: "",
         nParte: "",
         revision: "",
         entregaLaboratorio: null,
-        fai: null,
+        fai: "",
         liberacionLaboratorio: null,
-        fechaDeLaSolicitud: "",
-        nombreDelProyecto: "",
         estatusId: "",
-        comentarios: null,
+        comentarios: "",
         archivoFai: null,
-        estatusProyectoId: "",
     });
 
-    const[planta, setPlanta] = useState([]);
+    const[listaProyecto, setListaProyecto] = useState([]);
     const[cliente, setCliente] = useState([]);
-    const[estatusProyecto, setEstatusProyecto] = useState([]);
-    const[solicitante, setSolicitante] = useState([]);
     const[estatus, setEstatus] = useState([]);
     const[openSnackbar, setOpenSnackbar] = useState(false);
     const[fileName, setFileName] = useState("");
@@ -78,35 +71,18 @@ const EditALTemplate = () => {
     }, [id]);
 
     useEffect(() => {
-        const getPlanta = async () =>{
+        const getListaProyecto = async () => {
             try{
-                const reponse = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaPlanta`);
-                const data = await reponse.json();
-                setPlanta(data);
-            }catch(error){
-                console.log("Error en el fetching", error);
-            }
-        };
-
-        getPlanta();
-    }, []);
-
-    useEffect(() => {
-        const fetchEstatus = async () => {
-            try{
-                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaEstatusProyecto`);
-    
-                if(!response.ok){
-                    throw new Error(`Error al hacer fetching: ${response.statusText}`);
-                }
-    
+                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaProyectosAL`);
                 const data = await response.json();
-                setEstatusProyecto(data);
+                console.log("Lista de proyecto", data);
+                setListaProyecto(data);
             }catch(error){
-                console.log(`Error: ${error}`);
+                console.error("Error en el fetching: ", error);
             }
         }
-        fetchEstatus();
+
+        getListaProyecto();
     }, []);
 
     useEffect(() => {
@@ -120,19 +96,6 @@ const EditALTemplate = () => {
             }
         };
         getCliente();
-    }, []);
-
-    useEffect(() => {
-        const getSolicitante = async () =>{
-            try{
-                const response = await fetch(`${config.apiUrl}/Impresoras/ObtenerListaSolicitante`);
-                const data = await response.json();
-                setSolicitante(data);
-            }catch(error){
-                console.log("Error en el fetching", error);            
-            }
-        }
-        getSolicitante();
     }, []);
 
     useEffect(() => {
@@ -188,22 +151,18 @@ const EditALTemplate = () => {
 
         try {
             const formDataToSend = new FormData();
+            formDataToSend.append("proyectoId", formData.proyectoId);
             formDataToSend.append("codigo", formData.codigo);
-            formDataToSend.append("plantaId", formData.plantaId);
-            formDataToSend.append("solicitanteId", formData.solicitanteId);
             formDataToSend.append("clienteId", formData.clienteId);
             formDataToSend.append("nDibujo", formData.nDibujo);
             formDataToSend.append("nParte", formData.nParte);
             formDataToSend.append("revision", formData.revision);
-            formDataToSend.append("entregaLaboratorio", formData.entregaLaboratorio ?? "");
+            formDataToSend.append("EntregaLaboratorio", formData.entregaLaboratorio ?? "");
             formDataToSend.append("fai", formData.fai ?? "");
-            formDataToSend.append("liberacionLaboratorio", formData.liberacionLaboratorio ?? "");
-            formDataToSend.append("fechaDeLaSolicitud", formData.fechaDeLaSolicitud);
-            formDataToSend.append("nombreDelProyecto", formData.nombreDelProyecto);
+            formDataToSend.append("LiberacionLaboratorio", formData.liberacionLaboratorio ?? "");
             formDataToSend.append("estatusId", formData.estatusId);
             formDataToSend.append("comentarios", formData.comentarios ?? "");
-            formDataToSend.append("FormFile", formData.archivoFai || null);
-            formDataToSend.append("estatusProyectoId", formData.estatusProyectoId);
+            formDataToSend.append("FormFile", formData.archivoFai || null); 
 
             const response = await fetch(`${config.apiUrl}/Impresoras/Actualizar/${formData.id}`, {
                 method: 'PUT',
@@ -231,55 +190,23 @@ const EditALTemplate = () => {
                     <h2 className="card-title"> EDITAR - FX </h2>
 
                     <form onSubmit={ handleSubmit } className="card-form">
-
                         <TextField
-                            fullWidth
-                            label="Nombre del proyecto"
-                            required
-                            variant="outlined"
-                            name="nombreDelProyecto"
-                            value={ formData.nombreDelProyecto || "" }
-                            onChange={ handleChange }
-                        />
-
-                        <TextField
-                            fullWidth
                             select
                             required
+                            fullWidth
                             variant="outlined"
-                            label="Estatus del proyecto"
-                            name="estatusProyectoId"
-                            value={
-                                estatusProyecto.some((item) => item.id === formData.estatusProyectoId)
-                                    ? formData.estatusProyectoId
-                                    : ""
-                            }
-                            disabled={ estatusProyecto.length === 0 }
-                            onChange={ handleChange }
-                            sx={{
-                                minWidth: "200px",
-                                mr: 5,
-                                "& .MuiInputBase-root": {
-                                    fontSize: { xs: "0.875rem", sm: "1rem" },
-                                },
-                            }}
-                        >                            
-                            {estatusProyecto.map((item) => (
-                                <MenuItem key={ item.id } value={ item.id }>
-                                    { item.nombre }
+                            label="Nombre del proyecto"
+                            name="proyectoId"
+                            value={formData.proyectoId || ""}
+                            disabled={estatus.length === 0}
+                            onChange={handleChange}
+                        >
+                            {listaProyecto.map((item) => (
+                                <MenuItem key={item.id} value={item.id}>
+                                    {item.nombreDelProyecto}
                                 </MenuItem>
                             ))}
                         </TextField>
-
-                        <TextField
-                            fullWidth
-                            type="date"
-                            variant="outlined"
-                            name="fechaDeLaSolicitud"
-                            helperText="Fecha de la solicitud del proyecto"
-                            value={ formData.fechaDeLaSolicitud || "" }
-                            onChange={ handleChange }
-                        />
 
                         <TextField
                             fullWidth
@@ -292,48 +219,8 @@ const EditALTemplate = () => {
 
                         <TextField
                             select
-                            fullWidth
                             required
-                            variant="outlined"
-                            label="Solicitante"
-                            name="solicitanteId"
-                            value={ solicitante.some((item) => item.id === formData.solicitanteId) ? formData.solicitanteId : "" }
-                            disabled={ solicitante.length === 0 }
-                            onChange={ handleChange }
-                        >
-                            {
-                                solicitante.map((item) => (
-                                    <MenuItem key={ item.id } value={ item.id }>
-                                        { item.nombre }
-                                    </MenuItem>
-                                ))
-                            }
-                        </TextField>
-
-                        <TextField
-                            select
                             fullWidth
-                            required
-                            variant="outlined"
-                            label="Planta"
-                            name="plantaId"
-                            value={ planta.some((item) => item.id === formData.plantaId) ? formData.plantaId : "" }
-                            disabled={ planta.length === 0 }
-                            onChange={ handleChange }
-                        >
-                            {
-                                planta.map((item) => (
-                                    <MenuItem key={ item.id } value={ item.id }>
-                                        { item.nombre }
-                                    </MenuItem>
-                                ))
-                            }
-                        </TextField>
-
-                        <TextField
-                            select
-                            fullWidth
-                            required
                             variant="outlined"
                             label="Cliente"
                             name="clienteId"
@@ -347,7 +234,6 @@ const EditALTemplate = () => {
                                         { item.nombre }
                                     </MenuItem>
                                 ))
-
                             }
                         </TextField>
 
@@ -380,21 +266,21 @@ const EditALTemplate = () => {
                         />
                     
                         <TextField
-                            type="date"
                             fullWidth
+                            type="date"
                             variant="outlined"
-                            label="Entrega laboratorio"
                             name="entregaLaboratorio"
+                            helperText="Entrega laboratorio"
                             value={ formData.entregaLaboratorio || ""}
                             onChange={ handleChange }
                         />
 
                         <TextField
-                            type="date"
                             fullWidth
+                            type="date"
                             variant="outlined"
-                            label="Liberación laboratorio"
                             name="liberacionLaboratorio"
+                            helperText="Liberación laboratorio"
                             value={ formData.liberacionLaboratorio || "" }
                             onChange={ handleChange }
                         />
@@ -402,6 +288,7 @@ const EditALTemplate = () => {
                         <TextField
                             select
                             required
+                            fullWidth
                             variant="outlined"
                             label="Estatus"
                             name="estatusId"
@@ -423,11 +310,10 @@ const EditALTemplate = () => {
                             fullWidth
                             variant="outlined"
                             label="FAI"
-                            name="fai"
+                            name="fai"                            
                             value={ formData.fai || "" }
                             onChange={ handleChange }
                         />
-
 
                         <TextField                        
                             multiline
