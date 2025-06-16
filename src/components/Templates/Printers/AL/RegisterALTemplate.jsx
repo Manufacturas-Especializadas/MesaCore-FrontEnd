@@ -38,6 +38,7 @@ const RegisterALTemplate = () => {
     const[cliente, setCliente] = useState([]);
     const[estatus, setEstatus] = useState([]);
     const[openSnackbar, setOpenSnackbar] = useState(false);
+    const[loading, setLoading] = useState(false);
     const[fileName, setFileName] = useState("");
     const navigate = useNavigate();
 
@@ -84,6 +85,7 @@ const RegisterALTemplate = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const validateFormData = () => {
                 const requiredFields = [
@@ -160,7 +162,9 @@ const RegisterALTemplate = () => {
             }, 3000);
         } catch (error) {
             console.error(`Error: ${error.message}`);
-        }
+        }finally{
+            setLoading(false);
+        }    
     };
 
     const handleChange = (e) => {
@@ -408,6 +412,15 @@ const RegisterALTemplate = () => {
             >
                 <Alert onClose={ () => setOpenSnackbar(false) } severity="success" sx={{ width: "100%" }} variant="filled">
                     ¡Registro exitoso!
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={ loading }
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}                
+            >
+                <Alert severity="info" sx={{ width: "100%" }} variant="filled">
+                    Enviando registro...Por favor espera
                 </Alert>
             </Snackbar>
         </>
