@@ -7,7 +7,7 @@ import Register from "../Auth/Register/Register";
 
 // Dashboard
 import Dashboard from "../pages/Dashboard/Dashboard";
-import RegisterRequest from "../pages/Dashboard/RegisterRequest";
+import RegisterRequest from "../pages/Dashboard/RequestForPrints/RegisterRequest";
 
 // Settings
 import Settings from "../pages/Settings/Settings";

@@ -1,4 +1,4 @@
-import RegisterRequestTemplate from "../../components/Templates/Dashboard/RegisterRequestTemplate";
+import RegisterRequestTemplate from "../../../components/Templates/Dashboard/RequestForPrintsTemplates/RegisterRequestTemplate"
 
 const RegisterRequest = () => {
     return (
