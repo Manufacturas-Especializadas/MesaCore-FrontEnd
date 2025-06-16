@@ -159,7 +159,6 @@ const PrinterALTemplate = () => {
                     throw new Error("Error en el fetching");
                 }
                 const data = await response.json();
-                console.log("Datos: ", data)
                 setPrinters(data.data);
                 setTotalRecords(data.totalRecords);
 
