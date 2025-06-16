@@ -7,7 +7,7 @@ import Register from "../Auth/Register/Register";
 
 // Dashboard
 import Dashboard from "../pages/Dashboard/Dashboard";
-import RegisterPrinter from "../pages/Dashboard/RegisterPrinter";
+import RegisterRequest from "../pages/Dashboard/RegisterRequest";
 
 // Settings
 import Settings from "../pages/Settings/Settings";
@@ -53,7 +53,7 @@ const MyRoutes = () => {
             >
                 <Route index element={<Dashboard />} />
 
-                <Route path="register" element={<RegisterPrinter />} />
+                <Route path="register" element={<RegisterRequest />} />
 
                 {/* Configuración */}
                 <Route path="settings">

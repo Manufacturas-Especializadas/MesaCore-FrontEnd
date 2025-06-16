@@ -16,7 +16,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-const RegisterPrinterTemplate = () => {
+const RegisterRequestTemplate = () => {
     const[formData, setFormData] = useState({
         nombreDelProyecto: "",
         solicitanteId: "",
@@ -336,4 +336,4 @@ const RegisterPrinterTemplate = () => {
     )
 }
 
-export default RegisterPrinterTemplate
+export default RegisterRequestTemplate
