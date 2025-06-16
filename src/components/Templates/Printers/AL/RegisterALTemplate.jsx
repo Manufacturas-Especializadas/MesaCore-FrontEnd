@@ -304,6 +304,7 @@ const RegisterALTemplate = () => {
 
                     <TextField
                         select
+                        required
                         fullWidth
                         variant="outlined"
                         label="Estatus"
