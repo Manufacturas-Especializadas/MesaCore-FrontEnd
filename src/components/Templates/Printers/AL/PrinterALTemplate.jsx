@@ -115,7 +115,7 @@ const PrinterALTemplate = () => {
 
     const handleDelete = async () => {
         try{
-            const response = await fetch(`${config.apiUrl}/PrintersAl/Eliminar/${selectedPrinterId}`,{
+            const response = await fetch(`${config.apiUrl}/Impresoras/Eliminar/${selectedPrinterId}`,{
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
