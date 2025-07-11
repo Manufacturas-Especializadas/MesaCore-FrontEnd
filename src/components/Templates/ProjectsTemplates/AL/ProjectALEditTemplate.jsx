@@ -167,7 +167,7 @@ const ProjectALEditTemplate = () => {
         }
 
         try{
-            const response = await fetch(`https://localhost:44350/api/ProyectosAL/Editar/${formData.id}`, {
+            const response = await fetch(`${config.apiUrl}/api/ProyectosAL/Editar/${formData.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
